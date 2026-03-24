@@ -35,7 +35,8 @@
         /* SIDEBAR */
         .sidebar { 
             width: var(--sidebar-width); background: var(--kk-green-dark); 
-            display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.1); color: white; z-index: 100;
+            display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.1); color: white; z-index: 1000;
+            transition: transform 0.3s ease;
         }
         .sidebar-header { padding: 20px; background: rgba(0,0,0,0.2); border-bottom: 1px solid rgba(255,255,255,0.1); }
         .header-flex { display: flex; justify-content: space-between; align-items: center; }
@@ -53,7 +54,7 @@
         }
 
         /* SIDEBAR ACTIONS */
-        .sidebar-actions { padding: 0 15px 15px 15px; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-actions { padding: 15px; display: flex; flex-direction: column; gap: 8px; margin-top: auto; }
         .action-btn { 
             width: 100%; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);
             background: rgba(255,255,255,0.05); color: white; font-size: 11px; font-weight: bold;
@@ -76,7 +77,19 @@
         .nav-item.active { border-right: 4px solid var(--kk-accent); }
 
         /* MAIN CONTENT */
-        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+        .main-content { flex: 1; overflow-y: auto; display: flex; flex-direction: column; position: relative; }
+        
+        /* Mobile Top Bar (Only visible on mobile) */
+        .mobile-header {
+            display: none;
+            background: var(--kk-green-dark);
+            color: white;
+            padding: 10px 15px;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 500;
+        }
+
         .sticky-nav { background: var(--nav-bg); padding: 12px 30px; position: sticky; top: 0; z-index: 50; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .url-row { display: flex; align-items: center; gap: 10px; margin-bottom: 5px; font-size: 11px; }
         .url-tag { font-weight: bold; width: 70px; color: #999; }
@@ -90,37 +103,68 @@
         .step-item { display: flex; gap: 15px; margin-bottom: 12px; font-size: 14px; color: var(--text-sub); }
         .step-num { background: var(--kk-accent); color: var(--kk-green-dark); min-width: 24px; height: 24px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 11px; }
 
-        /* KEY NOTES STYLING */
-        .key-content-box { margin-top: 20px; padding: 20px; background: rgba(0, 119, 182, 0.05); border-left: 5px solid #0077b6; border-radius: 12px; display: none; }
-        .key-content-box h4 { color: #0077b6; margin-bottom: 15px; font-size: 15px; display: flex; align-items: center; gap: 10px; }
-        
-        .key-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); border-radius: 6px; transition: 0.2s; }
-        .key-item:hover { background: rgba(0,0,0,0.02); }
-        .key-text { flex: 1; font-size: 13.5px; line-height: 1.5; }
-        .key-actions { display: flex; gap: 12px; margin-left: 15px; opacity: 0.6; }
-        .key-actions i { cursor: pointer; font-size: 13px; transition: 0.2s; }
-        .key-actions i:hover { opacity: 1; }
-        .fa-edit:hover { color: var(--kk-orange); }
-        .fa-trash:hover { color: #e74c3c; }
-
-        .add-key-container { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed rgba(0,0,0,0.1); }
-        .add-key-container input { flex: 1; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); font-size: 12px; outline: none; background: var(--bg-body); color: var(--text-main); }
-        .add-key-container button { background: #0077b6; color: white; border: none; padding: 0 15px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; }
-
+        /* RESOURCE GRID */
         .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 25px; }
         .res-box { padding: 20px; border: 1px solid var(--border-color); border-radius: 15px; text-decoration: none; display: flex; align-items: center; gap: 15px; background: var(--bg-card); transition: 0.3s; }
         .res-box:hover { border-color: var(--kk-accent); transform: translateY(-2px); }
         
+        /* KEY NOTES */
+        .key-content-box { margin-top: 20px; padding: 20px; background: rgba(0, 119, 182, 0.05); border-left: 5px solid #0077b6; border-radius: 12px; display: none; }
+        .key-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+
         #welcome-view { text-align: center; padding-top: 100px; color: #ccc; }
+        .hamburger { background: none; border: none; color: var(--kk-accent); font-size: 20px; cursor: pointer; }
+
+        /* --- MOBILE RESPONSIVE FIXES --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow-x: hidden; }
+
+            .mobile-header { display: flex; }
+
+            .sidebar { 
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%; /* Ab ye poora screen lega */
+                height: 100%;
+                transform: translateX(-100%); /* Shuruat mein chupa rahega */
+                z-index: 2000;
+            }
+
+            .sidebar.active { transform: translateX(0); }
+
+            .main-content { width: 100%; height: 100vh; }
+
+            .content-area { padding: 15px; }
+            .glass-card { padding: 20px; border-radius: 12px; }
+
+            .resource-grid { grid-template-columns: 1fr; }
+            
+            .sticky-nav { padding: 10px 15px; }
+            .url-row { flex-wrap: wrap; }
+            .url-box { font-size: 10px; }
+            
+            /* Sidebar Footer adjustment for mobile */
+            .sidebar-actions { padding: 20px 15px; background: rgba(0,0,0,0.2); }
+            .owner-dropdown { bottom: 60px; width: 95%; left: 2.5%; }
+        }
     </style>
 </head>
 <body>
+
+    <div class="mobile-header">
+        <h2 style="font-size: 14px;"><i class="fas fa-leaf"></i> KNET | KISAN</h2>
+        <button class="hamburger" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+    </div>
 
     <aside class="sidebar">
         <div class="sidebar-header">
             <div class="header-flex">
                 <h2><i class="fas fa-leaf"></i> KNET | KISAN</h2>
-                <div class="theme-btn" onclick="toggleTheme()"><i id="tIcon" class="fas fa-moon"></i></div>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <div class="theme-btn" onclick="toggleTheme()"><i id="tIcon" class="fas fa-moon"></i></div>
+                    <button class="hamburger" onclick="toggleSidebar()" style="display: none;" id="closeSidebar"><i class="fas fa-times"></i></button>
+                </div>
             </div>
             <div class="lang-toggle">
                 <button onclick="setLang('en')" id="enBtn" class="lang-btn active">EN</button>
@@ -173,30 +217,26 @@
 
             <div id="page-view" class="glass-card" style="display:none;">
                 <h1 id="pageTitle" style="margin-bottom:20px; color:var(--text-main)"></h1>
-                
                 <div class="steps-container">
                     <h4 style="margin-bottom:15px; color:var(--kk-green-mid)"><i class="fas fa-stream"></i> Training Workflow</h4>
                     <div id="stepsList"></div>
                 </div>
-
                 <div id="keyContentContainer" class="key-content-box">
                     <h4><i class="fas fa-key"></i> Key Notes / Important Info</h4>
                     <div id="keyContentText"></div>
-                    
                     <div class="add-key-container">
-                        <input type="text" id="newKeyInput" placeholder="Add custom note... (Use [G] for green text)">
-                        <button onclick="addNewKey()">ADD NOTE</button>
+                        <input type="text" id="newKeyInput" placeholder="Add custom note...">
+                        <button onclick="addNewKey()">ADD</button>
                     </div>
                 </div>
-
                 <div class="resource-grid">
                     <a href="#" id="driveVideo" target="_blank" class="res-box">
                         <i class="fab fa-youtube" style="color:#ff0000; font-size:28px;"></i>
-                        <div><b style="display:block; color:var(--text-main);">Process Video</b><small style="color:#999;">Drive Link</small></div>
+                        <div><b style="display:block; color:var(--text-main);">Video</b><small style="color:#999;">Drive Link</small></div>
                     </a>
                     <a href="#" id="driveImg" target="_blank" class="res-box">
                         <i class="fas fa-images" style="color:var(--kk-accent); font-size:28px;"></i>
-                        <div><b style="display:block; color:var(--text-main);">UI Screenshots</b><small style="color:#999;">View Gallery</small></div>
+                        <div><b style="display:block; color:var(--text-main);">Screenshots</b><small style="color:#999;">Gallery</small></div>
                     </a>
                 </div>
             </div>
@@ -7092,219 +7132,266 @@ const OWNER_DATA = [
         { name: "Support Team", pages: ["SR Wise Delivery Report"] }
     ];
 let currentLang = 'en';
-    let activePage = null;
+let activePage = null;
 
-    // --- 3. RENDER MENU ---
-    function renderMenu() {
-        document.getElementById('menuList').innerHTML = STRUCTURE.map((g, i) => `
-            <div class="menu-group">
-                <div class="menu-trigger" onclick="toggleSub(${i}, this)">
-                    ${g.title} <i class="fas fa-chevron-right"></i>
-                </div>
-                <div class="submenu" id="sub-${i}">
-                    ${g.items.map(item => {
-                        if(item.type === 'label') return `<div class="menu-label">${item.text}</div>`;
-                        return `<div class="nav-item" onclick="loadPage('${item.text}', this)">${item.text}</div>`;
-                    }).join('')}
-                </div>
+// --- 3. RENDER MENU ---
+function renderMenu() {
+    document.getElementById('menuList').innerHTML = STRUCTURE.map((g, i) => `
+        <div class="menu-group">
+            <div class="menu-trigger" onclick="toggleSub(${i}, this)">
+                ${g.title} <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="submenu" id="sub-${i}">
+                ${g.items.map(item => {
+                    if(item.type === 'label') return `<div class="menu-label">${item.text}</div>`;
+                    return `<div class="nav-item" onclick="loadPage('${item.text}', this)">${item.text}</div>`;
+                }).join('')}
+            </div>
+        </div>
+    `).join('');
+}
+
+function toggleSub(index, el) {
+    const sub = document.getElementById(`sub-${index}`);
+    const icon = el.querySelector('i');
+    const isOpen = sub.style.display === 'block';
+    
+    // Desktop par baaki close karein, mobile par scroll allow karein
+    if (window.innerWidth > 768) {
+        document.querySelectorAll('.submenu').forEach(s => s.style.display = 'none');
+        document.querySelectorAll('.menu-trigger i').forEach(id => id.className = 'fas fa-chevron-right');
+    }
+    
+    if(!isOpen) { 
+        sub.style.display = 'block'; 
+        icon.className = 'fas fa-chevron-down'; 
+    } else {
+        sub.style.display = 'none';
+        icon.className = 'fas fa-chevron-right';
+    }
+}
+
+// --- 4. LOAD PAGE ---
+function loadPage(name, el) {
+    activePage = name;
+    const data = PAGE_DATA[name] || { file: name.replace(/\s+/g, '') + ".aspx", steps: ["Configuration pending..."] };
+    
+    document.getElementById('welcome-view').style.display = 'none';
+    document.getElementById('page-view').style.display = 'block';
+    document.getElementById('topNav').style.visibility = 'visible';
+    document.getElementById('pageTitle').innerText = name;
+
+    // URL Handling
+    const defaultUrl = `https://app.kisankonnect.in/kisankonnect/${data.file}`;
+    const saved = localStorage.getItem('kk_' + name);
+    document.getElementById('urlOld').innerText = defaultUrl;
+    
+    if(saved) {
+        document.getElementById('newRow').style.display = 'flex';
+        document.getElementById('urlNew').innerText = saved;
+        document.getElementById('liveBtn').href = saved;
+    } else {
+        document.getElementById('newRow').style.display = 'none';
+        document.getElementById('liveBtn').href = defaultUrl;
+    }
+
+    // Resources
+    document.getElementById('driveVideo').href = data.video || "#";
+    document.getElementById('driveImg').href = data.img || "#";
+
+    // Render Steps
+    const steps = currentLang === 'en' ? (data.steps || []) : (data.steps_mr || data.steps || []);
+    document.getElementById('stepsList').innerHTML = steps.map((s, i) => `
+        <div class="step-item"><div class="step-num">${i+1}</div><div>${s}</div></div>
+    `).join('');
+
+    renderKeyContent();
+
+    // UI Updates
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    if(el) el.classList.add('active');
+
+    // MOBILE AUTO-CLOSE: Nav item click hote hi sidebar band ho jaye
+    if (window.innerWidth <= 768) {
+        const sidebar = document.querySelector('.sidebar');
+        if (sidebar.classList.contains('active')) {
+            toggleSidebar();
+        }
+    }
+}
+
+// --- 5. KEY NOTES CRUD LOGIC ---
+function renderKeyContent() {
+    const keyContDiv = document.getElementById('keyContentContainer');
+    const keyTextDiv = document.getElementById('keyContentText');
+    const storageKey = `custom_keys_${activePage}_${currentLang}`;
+    
+    let customKeys = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const baseKeys = currentLang === 'en' ? (PAGE_DATA[activePage]?.keyContent || []) : (PAGE_DATA[activePage]?.keyContent_mr || []);
+
+    if (baseKeys.length > 0 || customKeys.length > 0) {
+        keyContDiv.style.display = 'block';
+        let html = baseKeys.map(line => renderLine(line, false)).join('');
+        html += customKeys.map((line, idx) => renderLine(line, true, idx)).join('');
+        keyTextDiv.innerHTML = html;
+    } else { 
+        keyContDiv.style.display = 'block'; 
+        keyTextDiv.innerHTML = `<p style="font-size:12px; color:#999; padding:10px;">No notes yet. Add one below!</p>`;
+    }
+}
+
+function renderLine(line, isCustom, idx) {
+    const isGreen = line.includes("[G]");
+    const cleanLine = line.replace("[G]", "").trim();
+    const color = isGreen ? "#28a745" : "var(--text-sub)";
+    const fontWeight = isGreen ? "bold" : "normal";
+    
+    const actions = isCustom ? `
+        <div class="key-actions">
+            <i class="fas fa-edit" onclick="updateKey(${idx})"></i>
+            <i class="fas fa-trash" onclick="deleteKey(${idx})"></i>
+        </div>` : '';
+
+    return `
+        <div class="key-item">
+            <div class="key-text" style="color:${color}; font-weight:${fontWeight};">
+                • ${cleanLine}
+            </div>
+            ${actions}
+        </div>`;
+}
+
+function addNewKey() {
+    const input = document.getElementById('newKeyInput');
+    if(!input.value.trim() || !activePage) return;
+    const storageKey = `custom_keys_${activePage}_${currentLang}`;
+    let keys = JSON.parse(localStorage.getItem(storageKey)) || [];
+    keys.push(input.value.trim());
+    localStorage.setItem(storageKey, JSON.stringify(keys));
+    input.value = ''; 
+    renderKeyContent();
+}
+
+function updateKey(idx) {
+    const storageKey = `custom_keys_${activePage}_${currentLang}`;
+    let keys = JSON.parse(localStorage.getItem(storageKey));
+    const val = prompt("Edit Note:", keys[idx]);
+    if(val !== null && val.trim() !== "") { 
+        keys[idx] = val.trim(); 
+        localStorage.setItem(storageKey, JSON.stringify(keys)); 
+        renderKeyContent(); 
+    }
+}
+
+function deleteKey(idx) {
+    if(confirm("Are you sure?")) {
+        const storageKey = `custom_keys_${activePage}_${currentLang}`;
+        let keys = JSON.parse(localStorage.getItem(storageKey));
+        keys.splice(idx, 1); 
+        localStorage.setItem(storageKey, JSON.stringify(keys)); 
+        renderKeyContent();
+    }
+}
+
+// --- 6. UTILS ---
+function toggleOwnerList(e) {
+    e.stopPropagation();
+    const list = document.getElementById('ownerList');
+    const isVisible = list.style.display === 'block';
+    
+    // Close other UI elements if any
+    list.style.display = isVisible ? 'none' : 'block';
+    
+    if(!isVisible) {
+        document.getElementById('ownerContent').innerHTML = OWNER_DATA.map(o => `
+            <div style="margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:5px;">
+                <b style="color:var(--kk-accent); font-size:11px;">${o.name}</b>
+                ${o.pages.map(p => `<div onclick="loadPage('${p}')" style="padding:3px 10px; font-size:10px; cursor:pointer; color:#bdc3c7;">• ${p}</div>`).join('')}
             </div>
         `).join('');
     }
+}
 
-    function toggleSub(index, el) {
-        const sub = document.getElementById(`sub-${index}`);
-        const icon = el.querySelector('i');
-        const isOpen = sub.style.display === 'block';
-        document.querySelectorAll('.submenu').forEach(s => s.style.display = 'none');
-        document.querySelectorAll('.menu-trigger i').forEach(id => id.className = 'fas fa-chevron-right');
-        
-        if(!isOpen) { 
-            sub.style.display = 'block'; 
-            icon.className = 'fas fa-chevron-down'; 
-        }
-    }
+function setLang(l) {
+    if(l === 'mr' && prompt("Enter Admin Password:") !== "Sunny@9696") return;
+    currentLang = l;
+    document.getElementById('enBtn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
+    document.getElementById('mrBtn').className = l === 'mr' ? 'lang-btn active' : 'lang-btn';
+    if(activePage) loadPage(activePage);
+}
 
-    // --- 4. LOAD PAGE ---
-    function loadPage(name, el) {
-        activePage = name;
-        const data = PAGE_DATA[name] || { file: name.replace(/\s+/g, '') + ".aspx", steps: ["Configuration pending..."] };
-        
-        document.getElementById('welcome-view').style.display = 'none';
-        document.getElementById('page-view').style.display = 'block';
-        document.getElementById('topNav').style.visibility = 'visible';
-        document.getElementById('pageTitle').innerText = name;
+function toggleTheme() {
+    const b = document.body;
+    const isDark = b.getAttribute('data-theme') === 'dark';
+    b.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    document.getElementById('tIcon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+}
 
-        // URL Handling
-        const defaultUrl = `https://app.kisankonnect.in/kisankonnect/${data.file}`;
-        const saved = localStorage.getItem('kk_' + name);
-        document.getElementById('urlOld').innerText = defaultUrl;
-        
-        if(saved) {
-            document.getElementById('newRow').style.display = 'flex';
-            document.getElementById('urlNew').innerText = saved;
-            document.getElementById('liveBtn').href = saved;
-        } else {
-            document.getElementById('newRow').style.display = 'none';
-            document.getElementById('liveBtn').href = defaultUrl;
-        }
-
-        // Resources
-        document.getElementById('driveVideo').href = data.video || "#";
-        document.getElementById('driveImg').href = data.img || "#";
-
-        // Render Steps
-        const steps = currentLang === 'en' ? (data.steps || []) : (data.steps_mr || data.steps || []);
-        document.getElementById('stepsList').innerHTML = steps.map((s, i) => `
-            <div class="step-item"><div class="step-num">${i+1}</div><div>${s}</div></div>
-        `).join('');
-
-        renderKeyContent();
-
-        // UI Updates
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        if(el) el.classList.add('active');
-    }
-
-    // --- 5. KEY NOTES CRUD LOGIC ---
-    function renderKeyContent() {
-        const keyContDiv = document.getElementById('keyContentContainer');
-        const keyTextDiv = document.getElementById('keyContentText');
-        const storageKey = `custom_keys_${activePage}_${currentLang}`;
-        
-        let customKeys = JSON.parse(localStorage.getItem(storageKey)) || [];
-        const baseKeys = currentLang === 'en' ? (PAGE_DATA[activePage]?.keyContent || []) : (PAGE_DATA[activePage]?.keyContent_mr || []);
-
-        if (baseKeys.length > 0 || customKeys.length > 0) {
-            keyContDiv.style.display = 'block';
-            let html = baseKeys.map(line => renderLine(line, false)).join('');
-            html += customKeys.map((line, idx) => renderLine(line, true, idx)).join('');
-            keyTextDiv.innerHTML = html;
-        } else { 
-            keyContDiv.style.display = 'block'; // Always show to allow adding first note
-            keyTextDiv.innerHTML = `<p style="font-size:12px; color:#999; padding:10px;">No notes yet. Add one below!</p>`;
-        }
-    }
-
-    function renderLine(line, isCustom, idx) {
-        const isGreen = line.includes("[G]");
-        const cleanLine = line.replace("[G]", "").trim();
-        const color = isGreen ? "#28a745" : "var(--text-sub)";
-        const fontWeight = isGreen ? "bold" : "normal";
-        
-        const actions = isCustom ? `
-            <div class="key-actions">
-                <i class="fas fa-edit" title="Edit" onclick="updateKey(${idx})"></i>
-                <i class="fas fa-trash" title="Delete" onclick="deleteKey(${idx})"></i>
-            </div>` : '';
-
-        return `
-            <div class="key-item">
-                <div class="key-text" style="color:${color}; font-weight:${fontWeight};">
-                    • ${cleanLine}
-                </div>
-                ${actions}
-            </div>`;
-    }
-
-    function addNewKey() {
-        const input = document.getElementById('newKeyInput');
-        if(!input.value.trim() || !activePage) return;
-        
-        const storageKey = `custom_keys_${activePage}_${currentLang}`;
-        let keys = JSON.parse(localStorage.getItem(storageKey)) || [];
-        keys.push(input.value.trim());
-        localStorage.setItem(storageKey, JSON.stringify(keys));
-        
-        input.value = ''; 
-        renderKeyContent();
-    }
-
-    function updateKey(idx) {
-        const storageKey = `custom_keys_${activePage}_${currentLang}`;
-        let keys = JSON.parse(localStorage.getItem(storageKey));
-        const val = prompt("Edit Note:", keys[idx]);
-        if(val !== null && val.trim() !== "") { 
-            keys[idx] = val.trim(); 
-            localStorage.setItem(storageKey, JSON.stringify(keys)); 
-            renderKeyContent(); 
-        }
-    }
-
-    function deleteKey(idx) {
-        if(confirm("Are you sure you want to delete this note?")) {
-            const storageKey = `custom_keys_${activePage}_${currentLang}`;
-            let keys = JSON.parse(localStorage.getItem(storageKey));
-            keys.splice(idx, 1); 
-            localStorage.setItem(storageKey, JSON.stringify(keys)); 
-            renderKeyContent();
-        }
-    }
-
-    // --- 6. UTILS ---
-    function toggleOwnerList(e) {
-        e.stopPropagation();
-        const list = document.getElementById('ownerList');
-        const isVisible = list.style.display === 'block';
-        list.style.display = isVisible ? 'none' : 'block';
-        
-        if(!isVisible) {
-            document.getElementById('ownerContent').innerHTML = OWNER_DATA.map(o => `
-                <div style="margin-bottom:10px; border-bottom:1px solid rgba(255,255,255,0.05); padding-bottom:5px;">
-                    <b style="color:var(--kk-accent); font-size:11px;">${o.name}</b>
-                    ${o.pages.map(p => `<div onclick="loadPage('${p}')" style="padding:3px 10px; font-size:10px; cursor:pointer; color:#bdc3c7;">• ${p}</div>`).join('')}
-                </div>
-            `).join('');
-        }
-    }
-
-    function setLang(l) {
-        if(l === 'mr' && prompt("Enter Admin Password:") !== "Sunny@9696") return;
-        currentLang = l;
-        document.getElementById('enBtn').className = l === 'en' ? 'lang-btn active' : 'lang-btn';
-        document.getElementById('mrBtn').className = l === 'mr' ? 'lang-btn active' : 'lang-btn';
-        if(activePage) loadPage(activePage);
-    }
-
-    function toggleTheme() {
-        const b = document.body;
-        const isDark = b.getAttribute('data-theme') === 'dark';
-        b.setAttribute('data-theme', isDark ? 'light' : 'dark');
-        document.getElementById('tIcon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
-    }
-
-    function filterMenu() {
-        const q = document.getElementById('menuSearch').value.toLowerCase();
-        document.querySelectorAll('.nav-item').forEach(i => {
-            i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none';
-        });
-    }
-
-    function promptUpdate() {
-        const n = prompt("Enter new Live URL for " + activePage + ":");
-        if(n) { localStorage.setItem('kk_' + activePage, n); loadPage(activePage); }
-    }
-
-    function resetLink() { 
-        if(confirm("Reset to default URL?")) {
-            localStorage.removeItem('kk_' + activePage); 
-            loadPage(activePage); 
-        }
-    }
-
-    function copyText(id) { 
-        const txt = document.getElementById(id).innerText;
-        navigator.clipboard.writeText(txt).then(() => alert("URL Copied!")); 
-    }
-
-    document.addEventListener('click', () => {
-        document.getElementById('ownerList').style.display = 'none';
+function filterMenu() {
+    const q = document.getElementById('menuSearch').value.toLowerCase();
+    document.querySelectorAll('.nav-item').forEach(i => {
+        i.style.display = i.innerText.toLowerCase().includes(q) ? 'block' : 'none';
     });
+}
 
-    window.onload = renderMenu;
-</script>
+function promptUpdate() {
+    const n = prompt("Enter new Live URL for " + activePage + ":");
+    if(n) { localStorage.setItem('kk_' + activePage, n); loadPage(activePage); }
+}
 
+function resetLink() { 
+    if(confirm("Reset to default URL?")) {
+        localStorage.removeItem('kk_' + activePage); 
+        loadPage(activePage); 
+    }
+}
 
+function copyText(id) { 
+    const txt = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(txt).then(() => alert("URL Copied!")); 
+}
 
+// SIDEBAR TOGGLE LOGIC
+function toggleSidebar() {
+    const sidebar = document.querySelector('.sidebar');
+    const isMobile = window.innerWidth <= 768;
+    
+    sidebar.classList.toggle('active');
+    
+    // Mobile par body scroll lock karein jab menu khula ho
+    if (isMobile) {
+        if (sidebar.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    }
+}
+
+// GLOBAL CLICK HANDLER
+document.addEventListener('click', (e) => {
+    // Page Owner dropdown click outside handling
+    const ownerList = document.getElementById('ownerList');
+    const ownerBtn = document.getElementById('ownerBtn');
+    if (ownerBtn && !ownerBtn.contains(e.target)) {
+        ownerList.style.display = 'none';
+    }
+    
+    // Sidebar click outside (Optional: mobile par bahar click karne se menu band ho)
+    const sidebar = document.querySelector('.sidebar');
+    const hamburger = document.querySelector('.hamburger');
+    const mobileHeader = document.querySelector('.mobile-header');
+    
+    if (window.innerWidth <= 768 && 
+        sidebar.classList.contains('active') && 
+        !sidebar.contains(e.target) && 
+        !mobileHeader.contains(e.target)) {
+        toggleSidebar();
+    }
+});
+
+window.onload = renderMenu;
+</Script>
 
 
 
