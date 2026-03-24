@@ -117,38 +117,55 @@
         .hamburger { display: none; background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 10px; }
         
         @media (max-width: 768px) {
-            body { flex-direction: column; height: 100%; }
+            body { flex-direction: column; height: auto; min-height: 100vh; overflow: auto; }
             
             .sidebar { 
                 width: 100%; 
                 height: auto; 
                 max-height: 0; 
                 overflow: hidden;
-                flex-direction: row;
                 position: fixed;
-                bottom: 0;
+                top: 0;
                 left: 0;
                 right: 0;
                 z-index: 200;
                 transition: max-height 0.3s ease, box-shadow 0.3s ease;
+                flex-direction: column;
             }
             
-            .sidebar.active { max-height: 100vh; overflow-y: auto; flex-direction: column; }
+            .sidebar.active { 
+                max-height: 100vh; 
+                overflow-y: auto;
+                height: 100vh;
+                bottom: auto;
+            }
             
             .sidebar-header { 
                 width: 100%;
                 display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: stretch;
+                padding: 12px 15px;
+                background: var(--kk-green-dark);
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                flex-shrink: 0;
+            }
+            
+            .header-flex { 
+                display: flex;
                 justify-content: space-between;
                 align-items: center;
-                padding: 12px 15px;
             }
             
             .hamburger { display: block; }
             
             .main-content { 
                 width: 100%;
-                height: calc(100vh - 50px);
-                padding-bottom: 50px;
+                margin-top: 0;
+                padding-top: 0;
+                height: auto;
+                overflow: visible;
             }
             
             .content-area { padding: 15px; max-width: 100%; }
@@ -181,17 +198,41 @@
             
             .add-key-container button { width: 100%; }
             
-            .menu-scroll { max-height: 50vh; overflow-y: auto; width: 100%; }
+            .menu-scroll { 
+                flex: 1;
+                max-height: calc(100vh - 200px);
+                overflow-y: auto;
+                width: 100%;
+                padding: 0;
+            }
             
-            .sidebar-actions { flex-direction: row; gap: 5px; padding: 10px 15px; width: 100%; }
-            
-            .action-btn { flex: 1; padding: 8px 10px; font-size: 10px; }
-            
-            #pageTitle { font-size: 18px; margin-bottom: 15px; }
-            
-            .search-container { padding: 10px; }
+            .search-container { 
+                padding: 10px 15px;
+                flex-shrink: 0;
+                width: 100%;
+            }
             
             .search-container input { font-size: 12px; padding: 8px 12px; }
+            
+            .sidebar-actions { 
+                flex-direction: column;
+                gap: 8px;
+                padding: 10px 15px;
+                width: 100%;
+                flex-shrink: 0;
+            }
+            
+            .action-btn { 
+                width: 100%;
+                padding: 10px;
+                font-size: 11px;
+            }
+            
+            .nav-item { font-size: 12px; padding: 8px 20px 8px 35px; }
+            
+            .menu-label { font-size: 11px; padding: 10px 20px 5px 30px; }
+            
+            #pageTitle { font-size: 18px; margin-bottom: 15px; }
             
             .res-box { gap: 10px; padding: 15px; }
             
@@ -240,6 +281,16 @@
             .res-box b { font-size: 12px; }
             
             .res-box small { font-size: 10px; }
+            
+            .sidebar-header { padding: 10px 12px; }
+            
+            .search-container { padding: 8px 12px; }
+            
+            .sidebar-actions { padding: 8px 12px; gap: 6px; }
+            
+            .action-btn { padding: 8px; font-size: 10px; }
+            
+            .menu-scroll { max-height: calc(100vh - 180px); }
         }
     </style>
 </head>
@@ -7441,6 +7492,18 @@ let currentLang = 'en';
         sidebar.classList.toggle('active');
     }
 
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+        const sidebar = document.querySelector('.sidebar');
+        const hamburger = document.querySelector('.hamburger');
+        
+        if (window.innerWidth <= 768) {
+            if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+                sidebar.classList.remove('active');
+            }
+        }
+    });
+
     // Close sidebar when a menu item is clicked
     document.addEventListener('click', (e) => {
         if (e.target.closest('.nav-item')) {
@@ -7448,6 +7511,14 @@ let currentLang = 'en';
             if (window.innerWidth <= 768) {
                 sidebar.classList.remove('active');
             }
+        }
+    });
+
+    // Close sidebar on window resize for larger screens
+    window.addEventListener('resize', () => {
+        const sidebar = document.querySelector('.sidebar');
+        if (window.innerWidth > 768) {
+            sidebar.classList.remove('active');
         }
     });
 
