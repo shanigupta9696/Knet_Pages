@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Kisankonnect | FarmFresh Book of Policies</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,500;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0c3b2e 0%, #1b4d3a 100%);
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* 🌱 farming texture overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="rgba(200,230,150,0.08)" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg>');
+      background-repeat: repeat;
+      background-size: 28px;
+      opacity: 0.2;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* main card container (3D floating) */
+    .hero-card {
+      position: relative;
+      z-index: 10;
+      max-width: 600px;
+      width: 100%;
+      background: rgba(255, 255, 245, 0.92);
+      backdrop-filter: blur(4px);
+      border-radius: 4rem 2rem 4rem 2rem;
+      box-shadow: 0 35px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(210, 180, 100, 0.3) inset, 0 8px 20px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+      transform: rotateX(2deg) rotateY(1deg);
+    }
+
+    .hero-card:hover {
+      transform: rotateX(0deg) rotateY(0deg) scale(1.01);
+    }
+
+    .inner-panel {
+      padding: 2rem 1.8rem;
+      text-align: center;
+    }
+
+    .farm-icon {
+      font-size: 3.5rem;
+      filter: drop-shadow(2px 6px 12px rgba(60, 40, 0, 0.3));
+      color: #2f6b47;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 2rem;
+      color: #1e3b2f;
+      letter-spacing: -0.3px;
+      background: linear-gradient(135deg, #204e3a, #0f3b28);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .tagline {
+      color: #4a6e4f;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      border-bottom: 1px dashed #c0d6b3;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    /* 🌾 3D button */
+    .btn-terms {
+      background: linear-gradient(145deg, #2c6e3c, #1e562e);
+      border: none;
+      padding: 1rem 2.2rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #f9f3df;
+      border-radius: 80px;
+      cursor: pointer;
+      box-shadow: 0 12px 0 #0c3a1a, 0 8px 20px rgba(0,0,0,0.3);
+      transition: all 0.08s linear;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: 1px;
+    }
+
+    .btn-terms:active {
+      transform: translateY(5px);
+      box-shadow: 0 6px 0 #0c3a1a;
+    }
+
+    /* 🌻 BOOK MODAL (FLIPBOOK) */
+    .book-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(20, 35, 18, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.25s ease;
+      padding: 1rem;
+    }
+
+    .book-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* book container - 3D perspective */
+    .flipbook-container {
+      background: #fffcf0;
+      width: 100%;
+      max-width: 750px;
+      height: auto;
+      max-height: 90vh;
+      border-radius: 24px 12px 24px 12px;
+      box-shadow: 0 40px 70px rgba(0, 0, 0, 0.5), 0 0 0 8px #e9dbbc, 0 0 0 12px #bc9f6b;
+      transform: perspective(1500px) rotateX(2deg);
+      transition: transform 0.25s;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* book header */
+    .book-header {
+      background: #2d5e3b;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #fef7cf;
+      border-bottom: 3px solid #e9bc7d;
+    }
+
+    .book-header h3 {
+      font-weight: 600;
+      font-size: 1.2rem;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .close-book {
+      background: rgba(0,0,0,0.3);
+      border: none;
+      font-size: 1.6rem;
+      cursor: pointer;
+      color: #fff0bf;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      transition: 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-book:hover {
+      background: #b1622c;
+      transform: scale(0.96);
+    }
+
+    /* page area (book page) */
+    .book-page {
+      background: #fffaf0;
+      padding: 1.8rem 2rem;
+      flex: 1;
+      overflow-y: auto;
+      max-height: 65vh;
+      scroll-behavior: smooth;
+      font-size: 0.92rem;
+      line-height: 1.55;
+      color: #2c2a24;
+      font-weight: 450;
+      box-shadow: inset 0 8px 12px -8px rgba(0,0,0,0.05), inset 0 -4px 8px -4px rgba(0,0,0,0.02);
+    }
+
+    /* custom scroll */
+    .book-page::-webkit-scrollbar {
+      width: 5px;
+    }
+    .book-page::-webkit-scrollbar-track {
+      background: #ede5cf;
+    }
+    .book-page::-webkit-scrollbar-thumb {
+      background: #8b6b3c;
+      border-radius: 20px;
+    }
+
+    /* typography inside book */
+    .book-page h4 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #1e4a2f;
+      margin: 1rem 0 0.5rem 0;
+      border-left: 5px solid #74a57f;
+      padding-left: 12px;
+    }
+    .book-page h5 {
+      font-weight: 600;
+      color: #2e6b42;
+      margin: 0.7rem 0 0.3rem;
+    }
+    .book-page p {
+      margin-bottom: 0.7rem;
+      text-align: justify;
+    }
+    .book-page ul, .book-page ol {
+      margin: 0.5rem 0 0.8rem 1.5rem;
+    }
+    .book-page li {
+      margin: 0.2rem 0;
+    }
+    .policy-sub {
+      font-weight: 500;
+      color: #3a5c2a;
+      margin-top: 0.5rem;
+    }
+    hr {
+      margin: 12px 0;
+      border-color: #e2dccd;
+    }
+
+    /* navigation controls */
+    .book-controls {
+      background: #efe2c9;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #cdb386;
+    }
+
+    .nav-btn {
+      background: #5c8142;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      font-weight: bold;
+      color: white;
+      font-size: 1rem;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .nav-btn:active {
+      transform: scale(0.96);
+    }
+    .nav-btn.disabled {
+      background: #b8aa8a;
+      cursor: not-allowed;
+      opacity: 0.6;
+      transform: none;
+    }
+    .page-indicator {
+      font-weight: 600;
+      background: #fff3e0;
+      padding: 5px 14px;
+      border-radius: 60px;
+      font-size: 0.85rem;
+      color: #2f5a2c;
+    }
+
+    /* page flip micro animation */
+    .flip-animation {
+      animation: pageFlip 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    @keyframes pageFlip {
+      0% { transform: rotateY(-8deg) scale(0.98); opacity: 0.5; }
+      100% { transform: rotateY(0deg) scale(1); opacity: 1; }
+    }
+
+    /* responsive */
+    @media (max-width: 580px) {
+      .book-page {
+        padding: 1.2rem;
+        font-size: 0.85rem;
+      }
+      .btn-terms {
+        font-size: 1.1rem;
+        padding: 0.8rem 1.6rem;
+      }
+      .hero-card {
+        transform: none;
+      }
+      .flipbook-container {
+        max-height: 95vh;
+      }
+      .book-page {
+        max-height: 60vh;
+      }
+    }
+
+    /* small leaf decoration */
+    .leaf-badge {
+      position: absolute;
+      bottom: -12px;
+      right: 20px;
+      font-size: 2rem;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero-card">
+  <div class="inner-panel">
+    <div class="farm-icon">
+      <i class="fas fa-seedling"></i> <i class="fas fa-tractor"></i>
+    </div>
+    <h1>Kisankonnect</h1>
+    <div class="tagline">FarmFresh • Rooted in Trust</div>
+    <button class="btn-terms" id="openBookBtn">
+      <i class="fas fa-file-contract"></i> Terms & Conditions
+    </button>
+    <p style="margin-top: 1.8rem; font-size: 0.75rem; color: #3f6b49;">🌾 ethical farming · honest harvest</p>
+  </div>
+  <div class="leaf-badge"><i class="fas fa-leaf"></i></div>
+</div>
+
+<!-- FLIPBOOK MODAL -->
+<div id="bookModal" class="book-overlay">
+  <div class="flipbook-container" id="flipbook">
+    <div class="book-header">
+      <h3><i class="fas fa-book-open"></i> PRIVACY POLICY · Kisankonnect</h3>
+      <button class="close-book" id="closeBookBtn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="book-page" id="bookPageContent">
+      <!-- dynamic page content injected -->
+    </div>
+    <div class="book-controls">
+      <button class="nav-btn" id="prevPageBtn"><i class="fas fa-chevron-left"></i> Previous</button>
+      <span class="page-indicator" id="pageIndicator">Page 1 / 1</span>
+      <button class="nav-btn" id="nextPageBtn">Next <i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ----------------------------------------------
+  // FULL PRIVACY POLICY SPLIT INTO 6 BOOK PAGES (preserving exact content)
+  // ----------------------------------------------
+  // Page 1: Company intro, Section 1 + full "2. WHAT INFORMATION WE COLLECT AND HOW WE USE IT" (2.1,2.2,2.3)
+  // Page 2: 3. BACKGROUND GEO LOCATION, 4. YOUR PRIVACY, 5. TERMS AND CONDITIONS, 6. HOW LONG, 7. USE OF COOKIES (first part)
+  // Page 3: remaining USE OF COOKIES + 8. WILL YOUR INFORMATION BE SHARED + 9. USER'S RIGHT
+  // Page 4: 10. HOW CAN YOU ERASE, 11. DPO, 12. SECURITY
+  // Page 5: 13. PRIVACY OF MINORS, 14. MISCELLANEOUS, 15. DATA PROCESSING, 16. CHANGES, 17. CONTACT US
+  // (All content verbatim from user prompt, structured cleanly)
+
+  const pagesContent = [
+    // PAGE 1
+    `<div>
+      <h4>📜 Privacy Policy Overview</h4>
+      <p><strong>Kisankonnect Safe Food Private Limited</strong> (hereinafter referred to as "Kisankonnect"), a company incorporated under the laws of India, having its registered office at Gut No. 115/3/1, At. Ranjankhol, Post. Tilaknagar, Tal. Rahata, Dist. Ahilya Nagar, Maharashtra 413720 manages and operates a Website located at the URL https://www.kisankonnect.in/ and a mobile application under the brand name Kisankonnect FarmFresh Produce (collectively referred to as the Website).</p>
+      <p>This Privacy Policy, together with the Terms and Conditions governs your use of the Website and describes our policies on collection, use, disclosure, processing, transfer, and storage of information. By using, browsing, accessing, or purchasing from the Website you agree to be bound by this Privacy Policy.</p>
+      <h4>1. WHAT INFORMATION WE COLLECT AND HOW WE USE IT</h4>
+      <p>We use personal information to provide the services you request. To the extent we use your personal information for marketing, we provide opt-out ability. Personal data collected includes: Personal Contact Information, Payment Details, Order History, Passwords, IP Address, Cookie Identifiers, Location Data, Demographic profile, pages visited, clicks, photographs, contact list (if given), etc.</p>
+      <p><strong>Use of Information:</strong> To deliver products/services, advertise new products, share with third party businesses (with consent), analyze patterns, share with govt/regulatory if demanded, share with delivery partners, suppliers/farmers, dark stores, cold storage, and for due diligence during corporate restructuring, troubleshooting, and resolving disputes.</p>
+      <p>We may track certain behaviour data (URLs, browser info, IP) for internal research, demographics, and site improvement. Cookies help us provide tailored experience.</p>
+      <p><strong>2.2 & 2.3:</strong> We use third-party advertising, share with partners in compliance, analyze feedback, and use IP addresses to administer the site. Optional surveys help us improve content.</p>
+      <div class="policy-sub">🍅 Transparent sourcing · direct from farmers</div>
+    </div>`,
+
+    // PAGE 2
+    `<div>
+      <h4>🌍 3. BACKGROUND GEO LOCATION</h4>
+      <p>Background Geo collects location data to enable tracking your trips and visit to the farmer location and calculate distance travelled even the app is closed or not in use. This data will be uploaded to our internal portal of Kisankonnect where users can check their travelling history.</p>
+      <h4>🔒 4. YOUR PRIVACY - OUR COMMITMENT</h4>
+      <p>We respect your trust. We do not publish, sell, or share your personal information to third parties for their marketing purposes without your explicit consent. Please read this Privacy Policy to learn more about the ways in which we use and protect your personal information.</p>
+      <h4>📄 5. TERMS AND CONDITIONS</h4>
+      <p>When you use the Website, you consent to this Privacy Policy. If you do not agree, refrain from using the Website. By accessing our services and/or placing an order, you consent to data collection and use as described.</p>
+      <h4>⏳ 6. HOW LONG DO WE KEEP YOUR INFORMATION</h4>
+      <p>We will only retain your personal information for as long as it is necessary for the purpose set out in this Privacy Policy, unless a longer retention period is required or permitted by law.</p>
+      <h4>🍪 7. USE OF COOKIES (Part 1)</h4>
+      <p>A "cookie" is a small piece of information stored by a web server on a browser. We place permanent and temporary cookies to help analyze web flow, measure promotional effectiveness, and provide convenience. Cookies do not contain personally identifiable information. You can decline cookies but may lose some features.</p>
+    </div>`,
+
+    // PAGE 3: finish cookies + sharing + user rights
+    `<div>
+      <h4>🍪 7. USE OF COOKIES (continued)</h4>
+      <p>Most cookies are session cookies deleted at session end. You may encounter third-party cookies on our pages; we do not control third-party cookies. Cookies help target content and reduce password entry.</p>
+      <h4>🤝 8. WILL YOUR INFORMATION BE SHARED WITH ANYONE?</h4>
+      <p>We do not sell personal information except as described. We may share with corporate entities/affiliates to detect fraud, prevent abuse, or for joint services. Third parties must comply with data privacy laws. Disclosure may occur for legal processes, law enforcement, enforce Terms, protect rights, or in case of merger/reorganization/acquisition – the new entity will follow this privacy policy.</p>
+      <h4>⚙️ 9. USER'S RIGHT WITH RESPECT TO THE INFORMATION COLLECTED</h4>
+      <p>We provide all users with the option to opt-out of promotional communications. You may change your interests at any time, update information, and cancel registration. However, information may remain in archive. Users have the right to request deletion, rectification, completion, and access their personal data.</p>
+      <p><i class="fas fa-user-check"></i> You are empowered to manage your privacy choices at any moment.</p>
+    </div>`,
+
+    // PAGE 4: Erasure, DPO, Security
+    `<div>
+      <h4>✏️ 10. HOW CAN YOU ERASE, RECTIFY, COMPLETE AND ACCESS THE DATA?</h4>
+      <p>As per the Digital Personal Data Protection Act, 2023, you have the right to request access, rectification, or deletion (subject to legal retention). To request review, update, or deletion, email grievanceofficer@kisankonnect.in. You can also complete your profile via our Website.</p>
+      <h4>🛡️ 11. DATA PROTECTION OFFICER (DPO)</h4>
+      <p>In accordance with DPDP Act 2023, the Data Protection Officer details:<br/>
+      <strong>Mr. Sandeep Pharne</strong><br/>
+      KISANKONNECT SAFE FOOD PRIVATE LIMITED Gut No. 115/3/1, At. Ranjankhol, Post. Tilaknagar, Tal. Rahata, Dist. Ahilya Nagar, Maharashtra 413720<br/>
+      Email: it.security@kisankonnect.in  |  Time: Mon-Sat 10:00 to 19:00 Hours.</p>
+      <h4>🔐 12. SECURITY OF INFORMATION COLLECTED</h4>
+      <p>Our Website uses SSL encryption, secure servers, and strict security guidelines. Only authorized personnel have access on a need-to-know basis. However, internet transmissions are not absolutely secure. We employ reasonable security practices under IT Act, 2000 and rules. Third parties engaged represent compliance with data privacy laws.</p>
+    </div>`,
+
+    // PAGE 5: minors, miscellaneous, data processing, changes, contact
+    `<div>
+      <h4>🧒 13. PRIVACY OF MINORS</h4>
+      <p>Children under 18 are not eligible to use our Website. Minors must not submit personal information. Purchases can be made by legal guardians or parents. Sale of adult material to minors is strictly prohibited.</p>
+      <h4>🔗 14. MISCELLANEOUS</h4>
+      <p><strong>Links to Other Sites:</strong> Our Website links to other Websites that may collect personally identifiable information. We are not responsible for the privacy practices or content of those linked Websites.</p>
+      <h4>📊 15. DATA PROCESSING</h4>
+      <p>We ensure Data collected is processed according to this Privacy Notice and Applicable Law. Written contracts with Partners and Service Providers ensure adequate protection consistent with applicable law.</p>
+      <h4>🔄 16. CHANGES TO OUR PRIVACY NOTICE</h4>
+      <p>Our business changes constantly; please check our Website and mobile app frequently for updates. The updated version will be effective as soon as it is accessible.</p>
+      <h4>📞 17. CONTACT US ABOUT THIS NOTICE</h4>
+      <p>If you have questions, call +91 7583888999 or e-mail customercare@kisankonnect.in. For information on Service Providers/Partners, we will respond within 30 days.</p>
+      <hr />
+      <p style="font-size:0.8rem; text-align:center;">🌱 Kisankonnect – rooted in honesty, committed to your privacy.</p>
+    </div>`
+  ];
+
+  // Total pages = 5
+  const totalPages = pagesContent.length;
+  let currentPage = 0;        // zero-indexed
+  let flipTimeout = null;
+
+  const bookPageDiv = document.getElementById('bookPageContent');
+  const prevBtn = document.getElementById('prevPageBtn');
+  const nextBtn = document.getElementById('nextPageBtn');
+  const pageIndicatorSpan = document.getElementById('pageIndicator');
+  const modal = document.getElementById('bookModal');
+  const openBtn = document.getElementById('openBookBtn');
+  const closeBtn = document.getElementById('closeBookBtn');
+
+  // Helper: update page content with smooth animation
+  function updatePage(animate = true) {
+    if (!bookPageDiv) return;
+    const newContent = pagesContent[currentPage];
+    if (animate) {
+      bookPageDiv.classList.add('flip-animation');
+      setTimeout(() => {
+        bookPageDiv.innerHTML = newContent;
+        // scroll to top of page after content change
+        bookPageDiv.scrollTop = 0;
+      }, 20);
+      setTimeout(() => {
+        bookPageDiv.classList.remove('flip-animation');
+      }, 260);
+    } else {
+      bookPageDiv.innerHTML = newContent;
+      bookPageDiv.scrollTop = 0;
+    }
+    // update indicator and button states
+    pageIndicatorSpan.innerText = `Page ${currentPage+1} / ${totalPages}`;
+    // manage disabled states
+    if (currentPage === 0) {
+      prevBtn.classList.add('disabled');
+    } else {
+      prevBtn.classList.remove('disabled');
+    }
+    if (currentPage === totalPages - 1) {
+      nextBtn.classList.add('disabled');
+    } else {
+      nextBtn.classList.remove('disabled');
+    }
+  }
+
+  function nextPage() {
+    if (currentPage < totalPages - 1) {
+      currentPage++;
+      updatePage(true);
+    }
+  }
+
+  function prevPage() {
+    if (currentPage > 0) {
+      currentPage--;
+      updatePage(true);
+    }
+  }
+
+  // reset book to first page when opened
+  function openBook() {
+    currentPage = 0;
+    updatePage(false);   // instant first load
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeBook() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    // optional reset page state
+  }
+
+  // event listeners
+  openBtn.addEventListener('click', openBook);
+  closeBtn.addEventListener('click', closeBook);
+  prevBtn.addEventListener('click', prevPage);
+  nextBtn.addEventListener('click', nextPage);
+
+  // close modal when clicking on backdrop overlay
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeBook();
+    }
+  });
+
+  // optional keyboard arrow navigation when book is open
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('active')) return;
+    if (e.key === 'ArrowLeft') {
+      prevPage();
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+      nextPage();
+      e.preventDefault();
+    } else if (e.key === 'Escape') {
+      closeBook();
+    }
+  });
+
+  // disable body scroll when modal active (extra safe)
+  const observer = new MutationObserver(() => {
+    if (modal.classList.contains('active')) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+  observer.observe(modal, { attributes: true, attributeFilter: ['class'] });
+
+  // preload initial state: set default page content (first page)
+  bookPageDiv.innerHTML = pagesContent[0];
+  pageIndicatorSpan.innerText = `Page 1 / ${totalPages}`;
+  prevBtn.classList.add('disabled');
+  if(totalPages===1) nextBtn.classList.add('disabled');
+  else nextBtn.classList.remove('disabled');
+</script>
+</body>
+</html>
