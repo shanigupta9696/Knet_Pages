@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Postman Plans: Team vs Enterprise · Company Decision Guide</title>
+    <!-- Font Awesome 6 (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Inter for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c10;
+            color: #ecedee;
+            line-height: 1.5;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #0f1117;
+            border-radius: 2rem;
+            padding: 2rem 2rem 2.5rem 2rem;
+            box-shadow: 0 25px 40px -12px rgba(0,0,0,0.5);
+            border: 1px solid #2a2f3a;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        .postman-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: #1e2129;
+            padding: 0.5rem 1.5rem;
+            border-radius: 60px;
+            margin-bottom: 1rem;
+        }
+        .postman-badge i {
+            font-size: 2rem;
+            color: #ff6c37;
+        }
+        .postman-badge span {
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #fff, #ff8a5c);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        h1 {
+            font-size: 2.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff, #ffb48a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .sub {
+            color: #9ca3af;
+            font-size: 1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .team-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            background: #151a22;
+            padding: 1.2rem 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid #2c313c;
+        }
+        .metric-card {
+            background: #1e232c;
+            border-radius: 1rem;
+            padding: 0.7rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .metric-card i {
+            font-size: 1.8rem;
+            color: #ff6c37;
+        }
+        .metric-card div {
+            text-align: left;
+        }
+        .metric-card .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+            color: #9ca3af;
+        }
+        .metric-card .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .pricing-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            justify-content: center;
+        }
+        .plan-card {
+            flex: 1;
+            min-width: 280px;
+            background: #13161f;
+            border-radius: 1.8rem;
+            border: 1px solid #2d323e;
+            transition: transform 0.2s, box-shadow 0.2s;
+            overflow: hidden;
+        }
+        .plan-card.highlight {
+            border: 2px solid #ff6c37;
+            box-shadow: 0 8px 20px rgba(255,108,55,0.2);
+            transform: scale(1.02);
+            background: #171c27;
+        }
+        .plan-header {
+            padding: 1.8rem 1.5rem 1rem 1.5rem;
+            border-bottom: 1px solid #2a2f3a;
+        }
+        .plan-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .team-name {
+            color: #fff;
+        }
+        .enterprise-name {
+            color: #ffb48a;
+        }
+        .badge-rec {
+            background: #ff6c371a;
+            color: #ff8a5c;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            border: 1px solid #ff6c3740;
+        }
+        .price {
+            margin-top: 1rem;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: white;
+        }
+        .price small {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: #9ca3af;
+        }
+        .yearly-total {
+            font-size: 0.85rem;
+            color: #b9c0d0;
+            margin-top: 0.3rem;
+        }
+        .plan-features {
+            padding: 1.5rem;
+            list-style: none;
+        }
+        .plan-features li {
+            margin-bottom: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #dbdee5;
+        }
+        .fa-check-circle {
+            color: #22c55e;
+            width: 1.2rem;
+        }
+        .fa-times-circle {
+            color: #ef4444;
+        }
+        .fa-plus-circle {
+            color: #ff6c37;
+        }
+        .text-muted {
+            color: #7e8493;
+            font-size: 0.75rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            border-left: 4px solid #ff6c37;
+            padding-left: 1rem;
+        }
+        .comparison-table {
+            width: 100%;
+            background: #0f1117;
+            border-radius: 1.2rem;
+            overflow-x: auto;
+            border: 1px solid #2a2f3a;
+        }
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .comparison-table th {
+            text-align: left;
+            padding: 1rem 1.2rem;
+            background: #1b1f29;
+            color: #ffc5aa;
+            font-weight: 600;
+            border-bottom: 1px solid #2e3440;
+        }
+        .comparison-table td {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid #20242e;
+            vertical-align: top;
+            color: #e2e4e9;
+        }
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        .feature-name {
+            font-weight: 600;
+            width: 30%;
+            color: #ffffff;
+        }
+        .team-col, .enterprise-col {
+            width: 35%;
+        }
+        .check-icon {
+            color: #22c55e;
+            margin-right: 6px;
+        }
+        .x-icon {
+            color: #ef4444;
+        }
+        .warning-icon {
+            color: #ffaa44;
+        }
+        .badge-addon {
+            background: #2d3748;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            margin-left: 8px;
+            white-space: nowrap;
+            color: #ffb48a;
+        }
+        .highlight-text {
+            color: #ffb48a;
+            font-weight: 500;
+        }
+        .pros-cons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0 1.5rem;
+            background: #0c0f15;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid #2a2f3a;
+        }
+        .pros-box, .cons-box {
+            flex: 1;
+            background: #13161f;
+            border-radius: 1.2rem;
+            padding: 1.2rem 1.5rem;
+        }
+        .pros-box h4, .cons-box h4 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pros-box ul, .cons-box ul {
+            padding-left: 1.2rem;
+        }
+        .pros-box li {
+            margin: 0.5rem 0;
+        }
+        .verdict {
+            background: linear-gradient(145deg, #1f1f2e, #13161f);
+            border-radius: 1.5rem;
+            padding: 1.8rem;
+            margin-top: 2rem;
+            border-left: 6px solid #ff6c37;
+        }
+        .verdict h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .btn-outline {
+            display: inline-block;
+            margin-top: 1rem;
+            background: transparent;
+            border: 1px solid #ff6c37;
+            color: #ff6c37;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .btn-outline:hover {
+            background: #ff6c3710;
+        }
+        footer {
+            margin-top: 2.5rem;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #5f677b;
+        }
+        @media (max-width: 780px) {
+            .container {
+                padding: 1.2rem;
+            }
+            .plan-card.highlight {
+                transform: scale(1);
+            }
+            .comparison-table th, .comparison-table td {
+                padding: 0.8rem;
+            }
+            .feature-name {
+                font-size: 0.85rem;
+            }
+        }
+        i.fa, i.far, i.fas {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="postman-badge">
+            <i class="fas fa-flask"></i>
+            <span>Postman API Platform</span>
+        </div>
+        <h1>Team vs. Enterprise · Strategic fit</h1>
+        <div class="sub">Complete A–Z comparison for your company: 10 members · 200+ APIs · Python + Flutter + QA</div>
+    </div>
+
+    <!-- team metrics summary -->
+    <div class="team-metrics">
+        <div class="metric-card"><i class="fas fa-code"></i><div><div class="label">Python devs</div><div class="value">4</div></div></div>
+        <div class="metric-card"><i class="fas fa-mobile-alt"></i><div><div class="label">Flutter devs</div><div class="value">4</div></div></div>
+         
+        <div class="metric-card"><i class="fas fa-plug"></i><div><div class="label">Total APIs</div><div class="value">≈200</div></div></div>
+        <div class="metric-card"><i class="fas fa-users"></i><div><div class="label">Team seats</div><div class="value">10</div></div></div>
+    </div>
+
+    <!-- pricing cards: Team is now highlighted -->
+    <div class="pricing-row">
+        <!-- Team Plan - HIGHLIGHTED -->
+        <div class="plan-card highlight">
+            <div class="plan-header">
+                <div class="plan-name"><span class="team-name"><i class="fas fa-users"></i> Team plan</span> <span class="badge-rec">recommended ★</span></div>
+                <div class="price">$19 <small>/user/month</small></div>
+                <div class="yearly-total"><i class="fas fa-calendar-alt"></i> Annual billing → <strong>$3,192/year</strong> for 14 users</div>
+                <div class="yearly-total" style="color:#ffaa44;"><i class="fas fa-info-circle"></i> + optional SSO add-on (extra cost)</div>
+            </div>
+            <ul class="plan-features">
+                <li><i class="fas fa-check-circle"></i> Shared workspaces & collaboration</li>
+                <li><i class="fas fa-check-circle"></i> 400 AI credits / user / month</li>
+                <li><i class="fas fa-check-circle"></i> Basic RBAC (roles per workspace)</li>
+                <li><i class="fas fa-check-circle"></i> Unlimited API builder & collections</li>
+                <li><i class="fas fa-times-circle"></i> <span class="text-muted">No SSO / SCIM included</span></li>
+                <li><i class="fas fa-times-circle"></i> No Private API Network</li>
+                <li><i class="fas fa-times-circle"></i> No audit logs / governance</li>
+                <li><i class="fas fa-clock"></i> Standard support</li>
+            </ul>
+        </div>
+
+        <!-- Enterprise Plan (normal) -->
+        <div class="plan-card">
+            <div class="plan-header">
+                <div class="plan-name"><span class="enterprise-name"><i class="fas fa-building"></i> Enterprise plan</span> <span class="badge-rec">advanced</span></div>
+                <div class="price">$49 <small>/user/month (estimated)</small></div>
+                <div class="yearly-total"><i class="fas fa-calendar-alt"></i> Annual estimated → <strong>$8,232/year</strong> for 14 seats</div>
+                <div class="yearly-total"><i class="fas fa-shield-alt"></i> Advanced security & control included</div>
+            </div>
+            <ul class="plan-features">
+                <li><i class="fas fa-check-circle"></i> Everything in Team, plus:</li>
+                <li><i class="fas fa-plus-circle"></i> <strong>SSO + SCIM</strong> (automatic user provisioning)</li>
+                <li><i class="fas fa-plus-circle"></i> <strong>Private API Network</strong> – internal API catalog</li>
+                <li><i class="fas fa-plus-circle"></i> Audit logs & advanced reporting</li>
+                <li><i class="fas fa-plus-circle"></i> API governance & secret scanner</li>
+                <li><i class="fas fa-plus-circle"></i> Partner workspaces (external collaborators, no extra cost)</li>
+                <li><i class="fas fa-plus-circle"></i> 800 AI credits/user (pooled) + 1M API calls/month</li>
+                <li><i class="fas fa-headset"></i> 24x5 premium support (SLA)</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- A-Z comparison table (same, but note Team is highlighted) -->
+    <div class="section-title"><i class="fas fa-table-list"></i> Feature deep-dive: Team vs Enterprise</div>
+    <div class="comparison-table">
+        <table>
+            <thead>
+                <tr><th>Feature / Capability</th><th class="team-col">Team plan</th><th class="enterprise-col">Enterprise plan</th></tr>
+            </thead>
+            <tbody>
+                <tr><td class="feature-name">Pricing (annual, per user)</td><td class="highlight-text">$19/user/month</td><td>$49/user/month (est.)</td></tr>
+                <tr><td class="feature-name">Total yearly cost (14 users)</td><td class="highlight-text">$3,192 + optional add-ons</td><td>≈$8,232 (all security features included)</td></tr>
+                <tr><td class="feature-name">SSO (SAML / OIDC)</td><td><i class="fas fa-exclamation-triangle warning-icon"></i> Add-on only (Simple Security) <span class="badge-addon">extra fee</span></td><td><i class="fas fa-check-circle check-icon"></i> Built-in, unlimited SSO</td></tr>
+                <tr><td class="feature-name">SCIM user provisioning</td><td><i class="fas fa-times-circle x-icon"></i> Not available</td><td><i class="fas fa-check-circle check-icon"></i> Automated sync with HR/IdP</td></tr>
+                <tr><td class="feature-name">Audit logs (user & org events)</td><td><i class="fas fa-times-circle x-icon"></i> No</td><td><i class="fas fa-check-circle check-icon"></i> Full audit trail, 1 year retention</td></tr>
+                <tr><td class="feature-name">Private API Network (internal hub)</td><td><i class="fas fa-times-circle x-icon"></i></td><td><i class="fas fa-check-circle check-icon"></i> Central discoverability for 200 APIs</td></tr>
+                <tr><td class="feature-name">Partner workspaces (external vendors)</td><td><i class="fas fa-times-circle x-icon"></i></td><td><i class="fas fa-check-circle check-icon"></i> Unlimited guest collaborators (no seat cost)</td></tr>
+                <tr><td class="feature-name">API Governance & compliance rules</td><td><i class="fas fa-times-circle x-icon"></i></td><td><i class="fas fa-check-circle check-icon"></i> Custom linting / style enforcement</td></tr>
+                <tr><td class="feature-name">Secret Scanner (tokens, keys)</td><td><i class="fas fa-times-circle x-icon"></i></td><td><i class="fas fa-check-circle check-icon"></i> Automatic detection in collections</td></tr>
+                <tr><td class="feature-name">Advanced reporting & insights</td><td>Basic usage stats</td><td><i class="fas fa-check-circle check-icon"></i> API performance, adoption, SLA dashboards</td></tr>
+                <tr><td class="feature-name">AI credits (per user/month)</td><td>400 credits (individual)</td><td>800 credits (pooled across org)</td></tr>
+                <tr><td class="feature-name">Postman API calls (programmatic)</td><td>Limited (depends on usage)</td><td><i class="fas fa-check-circle check-icon"></i> 1,000,000 calls/month</td></tr>
+                <tr><td class="feature-name">Support SLA</td><td>Community / standard email</td><td><i class="fas fa-check-circle check-icon"></i> 24x5 Premium support, 24h response</td></tr>
+                <tr><td class="feature-name">Workspace types</td><td>Internal / Team / Public</td><td>+ Private workspaces + Partner workspaces</td></tr>
+                <tr><td class="feature-name">Role-based access control (RBAC)</td><td>Basic workspace roles</td><td>Organization-level roles + granular permissions</td></tr>
+                <tr><td class="feature-name">Mock server & monitor requests</td><td>Included (metered)</td><td>Higher default limits, suitable for 200 APIs</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Business impact: now balanced view -->
+    <div class="section-title"><i class="fas fa-chart-line"></i> Business impact · profit & loss lens</div>
+    <div class="pros-cons">
+        <div class="pros-box">
+            <h4><i class="fas fa-chart-simple" style="color:#22c55e;"></i> Team plan – where it wins</h4>
+            <ul>
+                <li>✅ Lowest upfront cost: ~$3.2k/year vs $8.2k (saves ~$5k annually)</li>
+                <li>✅ Perfect for <strong>single team</strong> with no strict compliance</li>
+                <li>✅ Unlimited API builder & collaboration basics</li>
+                <li>✅ Enough for many startups and small teams</li>
+                <li>⚠️ Missing SSO (add-on cost), audit logs, and internal catalog</li>
+            </ul>
+        </div>
+        <div class="cons-box">
+            <h4><i class="fas fa-crown" style="color:#ff6c37;"></i> Enterprise plan – added value</h4>
+            <ul>
+                <li>✅ <strong>SSO + SCIM</strong> → automated onboarding/offboarding, huge security gain</li>
+                <li>✅ Private API Network → Flutter & QA teams instantly find & reuse APIs</li>
+                <li>✅ Audit logs & governance → meet internal/external audits</li>
+                <li>✅ Partner workspaces → collaborate with agencies without extra seats</li>
+                <li>✅ 1M API calls/month → heavy automation for QA</li>
+                <li>✅ Secret scanner prevents credential leaks</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Role-based benefits (neutral) -->
+    <div class="comparison-table" style="margin-top: 1rem;">
+        <table>
+            <thead><tr><th>👥 Role / Team</th><th>Key benefit with Team (cost-effective)</th><th>Extra with Enterprise</th></tr></thead>
+            <tbody>
+                <tr><td class="feature-name">🐍 Python backend devs (6)</td><td>Basic collaboration, shared collections</td><td>Private API Network + governance</td></tr>
+                <tr><td class="feature-name">📱 Flutter devs (4)</td><td>Can access APIs via shared links</td><td>Central catalog + mock servers + partner workspaces</td></tr>
+                <tr><td class="feature-name"> </td><td>Manual testing, limited automation runs</td><td>1M API calls/month + audit logs + secret scanner</td></tr>
+                <tr><td class="feature-name">🔐 Security / IT admin</td><td>Manual user management, no audit trail</td><td>SSO+SCIM + full audit logs</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Verdict: highlighting Team as recommended for cost-conscious companies -->
+    <div class="verdict">
+        <h3><i class="fas fa-gavel"></i> Final verdict: Team plan is the smart choice for your budget</h3>
+        <p style="margin-bottom: 1rem; font-size: 1rem;">With <strong>10 engineers, 200 APIs, and a mix of backend, mobile, and QA</strong>, the <strong class="highlight-text">Team plan</strong> offers everything you need to collaborate effectively at <strong>~$3,200/year</strong> – saving over $5,000 compared to Enterprise. While Enterprise adds advanced security and governance, those features may not be mandatory for your current scale.</p>
+        <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+            <li>✔️ <strong>Team plan wins on cost</strong> – ideal for startups and mid-sized teams without strict compliance needs</li>
+            <li>✔️ Includes shared workspaces, unlimited APIs, and basic RBAC – enough for most daily workflows</li>
+            <li>✔️ Optional SSO add-on available if you later need single sign-on</li>
+            <li>⚠️ Enterprise is only necessary if you require audit logs, private API network, or automated provisioning (SCIM)</li>
+        </ul>
+        <p><strong>Recommendation:</strong> Start with the <strong>Team plan</strong>. You can always upgrade to Enterprise later if security or governance demands grow. For now, the cost savings are significant and the feature set is more than adequate for your team of 14.</p>
+        <div class="btn-outline"><i class="fas fa-chart-simple"></i> ROI: Save $5,040/year with Team, invest in other tools</div>
+    </div>
+
+    <footer>
+        <i class="fas fa-flask"></i> Postman API Platform comparison · tailored for 6 Python, 4 Flutter,   · ~200 APIs · All figures based on official 2026 plans & industry estimates.
+    </footer>
+</div>
+</body>
+</html>
