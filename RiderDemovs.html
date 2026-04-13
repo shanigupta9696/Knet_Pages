@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>KisanKonnect Rider · Complete Roster + Attendance + Return Expert</title>
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background: linear-gradient(135deg, #d9f0da 0%, #b8e0b5 100%); min-height: 100vh; padding: 2rem 1.5rem; }
+    .dashboard { max-width: 1200px; margin: 0 auto; }
+    .header { text-align: center; margin-bottom: 2rem; }
+    .header h1 { font-size: 2rem; font-weight: 700; color: #1b5e2a; background: rgba(255,255,240,0.85); display: inline-flex; align-items: center; gap: 12px; padding: 0.5rem 2rem; border-radius: 80px; backdrop-filter: blur(4px); box-shadow: 0 6px 14px rgba(0,32,0,0.1); }
+    .sub { color: #1c4d1c; font-weight: 500; margin-top: 8px; }
+    .card { background: rgba(255, 255, 245, 0.94); border-radius: 2rem; box-shadow: 0 20px 30px -12px rgba(0, 32, 0, 0.2); margin-bottom: 2rem; transition: transform 0.2s; border: 1px solid #b9f6ca; }
+    .card:hover { transform: translateY(-3px); }
+    .card-inner { padding: 1.8rem 2rem; }
+    .demos-row { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .demo-card { flex: 1; min-width: 240px; background: #fefce6; border-radius: 1.5rem; padding: 1.2rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: 0.2s; border: 1px solid #c8e6c9; }
+    .demo-card:hover { background: #e8f5e9; transform: translateY(-4px); }
+    .demo-icon { background: #2e7d32; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; }
+    .demo-info h3 { font-size: 1.2rem; color: #1b5e20; }
+    .demo-info p { font-size: 0.75rem; color: #2e5c2a; }
+    .boat-header { display: flex; align-items: center; gap: 20px; margin-bottom: 28px; border-bottom: 2px solid #a5d6a7; padding-bottom: 12px; flex-wrap: wrap; }
+    .boat-icon { background: radial-gradient(circle at 30% 30%, #388e3c, #1b5e20); width: 75px; height: 75px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.8rem; color: #f1f8e9; box-shadow: 0 10px 18px rgba(0,0,0,0.15); animation: gentleFloat 3s ease-in-out infinite; }
+    @keyframes gentleFloat { 0% { transform: translateY(0); } 50% { transform: translateY(-5px); } 100% { transform: translateY(0); } }
+    .boat-title h2 { font-size: 1.8rem; color: #1b5e20; }
+    .boat-title p { color: #2e5c2a; }
+    .audio-toggle { margin-left: auto; background: #fff3e0; padding: 8px 18px; border-radius: 60px; display: flex; align-items: center; gap: 12px; font-weight: 600; }
+    .toggle-btn { background: #2e7d32; border: none; padding: 6px 18px; border-radius: 40px; color: white; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .toggle-btn.off { background: #9e9e9e; }
+    .qa-box { background: #f1f9ef; border-radius: 28px; padding: 1.5rem; }
+    .input-group { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+    .question-input { flex: 3; padding: 14px 20px; border-radius: 60px; border: 1px solid #b9f6ca; background: white; font-size: 1rem; }
+    .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn-ask, .btn-mic, .btn-speak { border: none; padding: 0 24px; border-radius: 60px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; transition: 0.2s; }
+    .btn-ask { background: #2e7d32; color: white; }
+    .btn-mic { background: #00897b; color: white; }
+    .btn-speak { background: #558b2f; color: white; }
+    .suggestions-dynamic { margin: 12px 0 16px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; min-height: 48px; }
+    .suggest-label { font-size: 0.75rem; background: #dcedc8; padding: 4px 12px; border-radius: 30px; font-weight: 600; color: #1b5e20; }
+    .sugg-chip { background: white; border: 1px solid #9ccc65; padding: 5px 14px; border-radius: 40px; font-size: 0.75rem; font-weight: 500; cursor: pointer; color: #1f4f1a; }
+    .sugg-chip:hover { background: #c8e6c9; }
+    .answer-area { background: #ffffffcc; border-radius: 28px; padding: 18px 24px; border-left: 8px solid #66bb6a; margin-top: 8px; }
+    .answer-label { font-weight: 700; color: #2e7d32; display: flex; gap: 10px; align-items: center; margin-bottom: 6px; }
+    .answer-text { font-size: 1.1rem; line-height: 1.45; color: #1e3a1e; font-weight: 500; }
+    footer { text-align: center; margin-top: 1.5rem; color: #1b5e20; font-size: 0.75rem; }
+    .voice-note { background: #e8f5e9; border-radius: 20px; padding: 5px 12px; display: inline-block; font-size: 0.7rem; margin-top: 6px; }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <h1><i class="fas fa-leaf"></i> KisanKonnect Rider <i class="fas fa-motorcycle"></i></h1>
+    <div class="sub">Complete Roster + Attendance + Return + Cash Deposit Expert • Hindi Voice Answers</div>
+  </div>
+  <div class="demos-row">
+    <div class="demo-card" id="riderDemoTrigger">
+      <div class="demo-icon"><i class="fas fa-motorcycle"></i></div>
+      <div class="demo-info"><h3><i class="fas fa-video"></i> Rider Demo</h3><p>Click to open Google Drive video</p></div>
+    </div>
+    <div class="demo-card" id="appUseTrigger">
+      <div class="demo-icon"><i class="fas fa-mobile-alt"></i></div>
+      <div class="demo-info"><h3><i class="fas fa-play-circle"></i> Rider progress</h3><p>Click to open Google Drive video</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-inner">
+      <div class="boat-header">
+        <div class="boat-icon"><i class="fas fa-sailboat"></i></div>
+        <div class="boat-title"><h2><i class="fas fa-clipboard-list"></i> Captain Oscar (Complete Rider Guide)</h2><p>Ask anything: Roster, Attendance, Return, Cash Deposit, Fun • Answers in Hindi</p></div>
+        <div class="audio-toggle"><span><i class="fas fa-headphones"></i> Auto Audio:</span><button id="audioToggleBtn" class="toggle-btn off">🔇 OFF</button></div>
+      </div>
+      <div class="qa-box">
+        <div class="input-group">
+          <input type="text" id="userQuestion" class="question-input" placeholder="e.g., attendance kya hota hai? / return approval kaise le? / bhai thak gaye kya?">
+          <div class="btn-group"><button id="askBtn" class="btn-ask"><i class="fas fa-paper-plane"></i> Ask</button><button id="micBtn" class="btn-mic"><i class="fas fa-microphone"></i> Voice</button><button id="speakAnswerBtn" class="btn-speak"><i class="fas fa-volume-up"></i> Speak Answer</button></div>
+        </div>
+        <div class="suggestions-dynamic" id="dynamicSuggestions"><span class="suggest-label"><i class="fas fa-lightbulb"></i> Suggestions:</span><span style="font-size:0.75rem; color:#5a8f5a;">Type at least 2 characters → relevant questions appear</span></div>
+        <div class="answer-area"><div class="answer-label"><i class="fas fa-water"></i> ⛵ Oscar's Answer (Hindi):</div><div class="answer-text" id="answerText">Namaste! I'm Oscar, your complete rider guide. Turn ON "Auto Audio" above and ask any question about roster, attendance, return, cash deposit, or even fun chat. Answers in Hindi + voice.</div></div>
+      </div>
+      <div class="voice-note"><i class="fas fa-check-circle"></i> Audio works on Chrome/Edge/Safari. Enable toggle → Ask → hear clear Hindi voice.</div>
+    </div>
+  </div>
+  <footer><i class="fas fa-code"></i> Rider Demo & Actual Rider App videos open in Google Drive (new tab) • 100+ Q&A</footer>
+</div>
+
+<script>
+  // ======================== 🔹 GOOGLE DRIVE VIDEO LINKS (ORIGINAL VIEW LINKS) 🔹 ========================
+  // These will open directly in Google Drive in a new tab
+  const RIDER_DEMO_LINK = "https://drive.google.com/file/d/1yQ-njqXdRkR7udHOTep6SUS7UhoLVBxz/view?usp=sharing";
+  const APP_USE_LINK = "https://drive.google.com/file/d/1jhOv_N0Y2H35TffNDPA0xGkQmWCxAdSO/view?usp=sharing";
+  
+  // ======================== COMPLETE Q&A DATABASE (200+ entries) ========================
+  const qaStore = [
+    // -------- ROSTER (30+) --------
+    { question: "roster kya hota hai", answer: "रोस्टर एक फीचर है जिसमें आप बताते हैं कि आप अगले दिन डिलीवरी के लिए उपलब्ध हैं या नहीं।" },
+    { question: "what is roster", answer: "रोस्टर एक सिस्टम है जो राइडर की अगले दिन की अवेलेबिलिटी ट्रैक करता है।" },
+    { question: "roster ka matlab kya hai", answer: "रोस्टर का मतलब है अपनी अगले दिन की उपलब्धता बताना।" },
+    { question: "mujhe roster samjhao", answer: "रोस्टर से सिस्टम को पता चलता है कि आप कल डिलीवरी करेंगे या नहीं।" },
+    { question: "roster ka use kya hai", answer: "रोस्टर का उपयोग राइडर की अवेलेबिलिटी चेक करने के लिए होता है।" },
+    { question: "roster kyu fill karna padta hai", answer: "ताकि सिस्टम आपको अगले दिन डिलीवरी असाइन कर सके।" },
+    { question: "roster ka kaam kya hota hai", answer: "यह बताता है कि राइडर कल डिलीवरी करेगा या नहीं।" },
+    { question: "roster se kya hota hai", answer: "इससे डिलीवरी प्लानिंग और असाइनमेंट होती है।" },
+    { question: "roster fill karne se kya benefit hai", answer: "आपको डिलीवरी मिलती है और शेड्यूल क्लियर होता है।" },
+    { question: "roster system kaise kaam karta hai", answer: "आप अवेलेबिलिटी सेलेक्ट करते हैं और सिस्टम उसके आधार पर डिलीवरी असाइन करता है।" },
+    { question: "roster kyu important hai", answer: "क्योंकि इससे डिलीवरी प्लानिंग स्मूथ होती है।" },
+    { question: "kya roster se pata chalta hai ki kal delivery karni hai", answer: "हाँ, रोस्टर से ही तय होता है कि आपको डिलीवरी मिलेगी या नहीं।" },
+    { question: "kya roster batata hai ki mai available hoon ya nahi", answer: "हाँ, रोस्टर में आप अपनी अवेलेबिलिटी बताते हैं।" },
+    { question: "agar mai roster fill na karu to kya hoga", answer: "आपको अगले दिन डिलीवरी असाइन नहीं हो सकती।" },
+    { question: "roster ka relation delivery se kya hai", answer: "रोस्टर के आधार पर ही डिलीवरी असाइन होती है।" },
+    { question: "kya roster mandatory hai", answer: "हाँ, डिलीवरी लेने के लिए रोस्टर भरना ज़रूरी है।" },
+    { question: "roster kab aata hai", answer: "रोस्टर पॉपअप शाम 5 बजे के बाद आता है।" },
+    { question: "roster fill karne ka time kya hai", answer: "आप शाम 5 बजे के बाद रोस्टर भर सकते हैं।" },
+    { question: "roster kab show hota hai", answer: "जब आप शाम 5 बजे के बाद ऐप खोलते हैं।" },
+    { question: "kya roster har din aata hai", answer: "हाँ, रोस्टर प्रतिदिन आता है।" },
+    { question: "5 baje ke baad hi kyu aata hai", answer: "ताकि अगले दिन की डिलीवरी प्लानिंग हो सके।" },
+    { question: "app open karte hi popup kyu aata hai", answer: "यह रोस्टर भरने के लिए आता है।" },
+    { question: "ye popup kis liye aata hai", answer: "आपकी अगले दिन की अवेलेबिलिटी लेने के लिए।" },
+    { question: "roster ka popup kya hota hai", answer: "यह एक स्क्रीन है जहाँ आप हाँ/नहीं सेलेक्ट करते हैं।" },
+    { question: "mujhe roster ka popup nahi aaya kyu", answer: "हो सकता है आपने शाम 5 बजे के बाद ऐप नहीं खोला हो।" },
+    { question: "roster ka notification kaise milta hai", answer: "ऐप खोलते ही पॉपअप के रूप में मिलता है।" },
+    { question: "agar mai kal kaam nahi karna chahta to", answer: "आप रोस्टर में 'नहीं' सेलेक्ट कर सकते हैं।" },
+    { question: "kal available hoon ya nahi kaise bataye", answer: "रोस्टर पॉपअप में ऑप्शन सेलेक्ट करके।" },
+    { question: "delivery confirm kaise hoti hai next day ki", answer: "रोस्टर में 'हाँ' सेलेक्ट करने पर डिलीवरी असाइन होती है।" },
+    { question: "kaise bataye ki mai leave pe hoon", answer: "रोस्टर में 'नहीं' सेलेक्ट करके।" },
+    { question: "roster skip kar sakte hai kya", answer: "स्किप कर सकते हैं, लेकिन फिर डिलीवरी नहीं मिलेगी।" },
+    
+    // -------- FUN / MASTI QUESTIONS --------
+    { question: "bhai thak gaye kya", answer: "थोड़ा सा 😄 लेकिन डिलीवरी टाइम पर पहुंचाना है!" },
+    { question: "kitna kama lete ho", answer: "मेहनत के हिसाब से कमाई होती है 💪" },
+    { question: "aaj kitni delivery ki", answer: "आज काफी डिलीवरी कर ली 😎" },
+    { question: "bhai fast aana", answer: "बस आ ही रहा हूँ 🚀" },
+    { question: "kitni der lagegi", answer: "बस थोड़ी ही देर में पहुंच रहा हूँ ⏱️" },
+    { question: "chai piyoge", answer: "अभी तो डिलीवरी पूरी कर लूं ☕ फिर देखेंगे 😄" },
+    { question: "pani piyoge", answer: "धन्यवाद 😊 लेकिन पहले डिलीवरी पूरी कर लेता हूँ" },
+    { question: "khana kha liya", answer: "अभी नहीं, पहले डिलीवरी फिर खाना 😄" },
+    { question: "itna kaam kyu karte ho", answer: "काम करेंगे तभी तो ग्रो करेंगे 💪" },
+    { question: "thakte nahi ho kya", answer: "थोड़ा थकते हैं लेकिन काम जरूरी है 😄" },
+    { question: "bhai late kyu ho gaye", answer: "ट्रैफिक थोड़ा ज्यादा था 🚦 लेकिन अब पहुंच रहा हूँ" },
+    { question: "traffic bahut hai kya", answer: "हाँ थोड़ा ट्रैफिक है 🚗 लेकिन मैं रास्ते में हूँ" },
+    { question: "gadi fast chalao", answer: "सुरक्षा पहले है 😄 आराम से पहुंचता हूँ" },
+    { question: "bike kitni speed se chalti hai", answer: "जितनी safe हो उतनी ही 🚴" },
+    { question: "aapka naam kya hai", answer: "मैं आपका डिलीवरी राइडर हूँ 😊" },
+    { question: "kahan se aaye ho", answer: "आपके ऑर्डर के साथ सीधे आपके पास 😄" },
+    { question: "bhai discount milega", answer: "डिस्काउंट ऐप में मिलता है 😄" },
+    { question: "free me de do", answer: "काश ऐसा होता 😄 लेकिन सिस्टम के हिसाब से ही होगा" },
+    { question: "jaldi aao warna cancel kar dunga", answer: "बस पहुंच रहा हूँ 🙏 थोड़ा समय दें" },
+    { question: "kitna door ho", answer: "बस पास ही हूँ 🚀" },
+    { question: "bhai smile karo", answer: "हमेशा 😄 डिलीवरी के साथ smile free है" },
+    { question: "mood kaisa hai", answer: "बढ़िया है 😎 डिलीवरी पर हूँ" },
+    { question: "aaj mausam kaisa hai", answer: "मौसम अच्छा है 😄 डिलीवरी के लिए perfect" },
+    { question: "baarish ho rahi hai kya", answer: "अगर हो भी रही है तो भी डिलीवरी जारी है 🌧️" },
+    { question: "bhai hero ho kya", answer: "हीरो नहीं 😄 लेकिन डिलीवरी जरूर समय पर करता हूँ" },
+    { question: "superman ho kya", answer: "नहीं 😄 लेकिन फास्ट जरूर हूँ" },
+    { question: "aap robot ho kya", answer: "नहीं 😄 मैं आपका रियल राइडर हूँ" },
+    { question: "ai ho kya", answer: "नहीं 😄 लेकिन smart जरूर हूँ" },
+    { question: "ghar kab jaoge", answer: "डिलीवरी खत्म होने के बाद 🏠" },
+    { question: "kitne baje free hoge", answer: "जब सारे ऑर्डर पूरे हो जाएंगे 😄" },
+    { question: "bhai ek joke suna", answer: "डिलीवरी इतनी fast है कि GPS भी confuse हो गया 😄" },
+    { question: "bore ho raha hu", answer: "बस डिलीवरी आने वाली है 😄" },
+    { question: "bhai recharge karwa do", answer: "वो तो आपको खुद करना पड़ेगा 😄" },
+    { question: "phone de do", answer: "डिलीवरी के बाद 😄 अभी काम पर हूँ" },
+    { question: "bhai selfie lete hai", answer: "पहले डिलीवरी फिर selfie 😄" },
+    { question: "photo le sakte hai", answer: "डिलीवरी के बाद 😄 जरूर" },
+    { question: "bhai dost banoge", answer: "डिलीवरी के बाद दोस्ती पक्की 😄" },
+    { question: "bhai number do", answer: "ऑर्डर से related बात ऐप में ही करें 😊" },
+    { question: "bhai kya chal raha hai", answer: "डिलीवरी चल रही है 😄" },
+    { question: "bhai mast ho kya", answer: "हाँ 😄 डिलीवरी के साथ full mast" },
+
+    // -------- ATTENDANCE + AVAILABLE STATUS (KFH FLOW) --------
+    { question: "attendance kya hota hai", answer: "अटेंडेंस का मतलब है ऐप में लॉगिन करके अपनी उपस्थिति दर्ज करना।" },
+    { question: "attendance ka matlab kya hai", answer: "इसका मतलब है कि आप काम के लिए तैयार हैं।" },
+    { question: "attendance kyu lagani padti hai", answer: "ताकि सिस्टम को पता चले कि आप काम के लिए उपलब्ध हैं।" },
+    { question: "attendance ka use kya hai", answer: "इससे सिस्टम आपको ऑर्डर असाइन करता है।" },
+    { question: "attendance kaun lagata hai", answer: "राइडर खुद ऐप में अटेंडेंस लगाता है।" },
+    { question: "kfh location pe aane ke baad kya karna hota hai", answer: "आपको ऐप खोलकर पहले अटेंडेंस लगानी होती है।" },
+    { question: "location pe aake kya kare", answer: "पहले अटेंडेंस लगाएं फिर available करें।" },
+    { question: "kfh pe pahuchne ke baad next step kya hai", answer: "ऐप खोलकर अटेंडेंस लगाएं।" },
+    { question: "attendance popup kya hota hai", answer: "यह एक स्क्रीन है जहाँ आप अटेंडेंस मार्क करते हैं।" },
+    { question: "popup me kya karna hota hai", answer: "आपको अटेंडेंस लगानी होती है।" },
+    { question: "attendance kaise lagaye", answer: "ऐप में पॉपअप या ऑप्शन से अटेंडेंस मार्क करें।" },
+    { question: "attendance ka button kaha hota hai", answer: "ऐप ओपन करते ही पॉपअप में दिखाई देता है।" },
+    { question: "attendance kaise mark kare", answer: "पॉपअप में दिए गए ऑप्शन से अटेंडेंस लगाएं।" },
+    { question: "attendance lagane ke baad kya karna hota hai", answer: "आपको अपना स्टेटस available करना होता है।" },
+    { question: "attendance ke baad next step kya hai", answer: "available status ऑन करें।" },
+    { question: "available status kya hota hai", answer: "इसका मतलब है कि आप ऑर्डर लेने के लिए तैयार हैं।" },
+    { question: "available ka matlab kya hai", answer: "आप डिलीवरी करने के लिए तैयार हैं।" },
+    { question: "available kyu karna padta hai", answer: "ताकि आपको ऑर्डर मिल सके।" },
+    { question: "available kaise kare", answer: "अटेंडेंस के बाद available ऑप्शन ऑन करें।" },
+    { question: "available button kaha hota hai", answer: "अटेंडेंस के बाद स्क्रीन पर दिखता है।" },
+    { question: "order kab milta hai", answer: "जब आप अटेंडेंस लगाकर available हो जाते हैं तब ऑर्डर मिलता है।" },
+    { question: "order kyu nahi mil raha", answer: "हो सकता है आपने अटेंडेंस नहीं लगाई या available नहीं किया।" },
+    { question: "order nahi aa raha kya kare", answer: "अटेंडेंस लगाएं और available स्टेटस ऑन करें।" },
+    { question: "attendance nahi lagayi to kya hoga", answer: "आपको ऑर्डर नहीं मिलेगा।" },
+    { question: "available nahi kiya to kya hoga", answer: "आपको ऑर्डर असाइन नहीं होगा।" },
+    { question: "kya bina attendance ke order milega", answer: "नहीं, अटेंडेंस के बिना ऑर्डर नहीं मिलेगा।" },
+    { question: "kya bina available kiye order milega", answer: "नहीं, available किए बिना ऑर्डर नहीं मिलेगा।" },
+    { question: "attendance aur available dono jaruri hai kya", answer: "हाँ, दोनों जरूरी हैं ऑर्डर पाने के लिए।" },
+    { question: "attendance lagaya par order nahi aa raha", answer: "चेक करें कि आपने available स्टेटस ऑन किया है या नहीं।" },
+    { question: "available hu fir bhi order nahi aa raha", answer: "कृपया थोड़ा इंतजार करें या नेटवर्क चेक करें।" },
+    { question: "kya daily attendance lagani padti hai", answer: "हाँ, हर दिन अटेंडेंस लगानी होती है।" },
+    { question: "kya har baar location pe attendance lagani hoti hai", answer: "हाँ, KFH पहुंचने पर अटेंडेंस जरूरी है।" },
+    { question: "attendance miss ho gayi kya kare", answer: "जितनी जल्दी हो सके ऐप में अटेंडेंस लगाएं।" },
+    { question: "attendance popup nahi aaya kya kare", answer: "ऐप को दोबारा खोलें या नेटवर्क चेक करें।" },
+    { question: "main kfh pe hu par order nahi aa raha", answer: "अटेंडेंस और available स्टेटस चेक करें।" },
+    { question: "location pe hu fir bhi order nahi mil raha", answer: "शायद आपने available नहीं किया है।" },
+    { question: "kaam start kaise kare", answer: "अटेंडेंस लगाकर available करें।" },
+    { question: "delivery start kaise hoti hai", answer: "अटेंडेंस और available करने के बाद।" },
+    { question: "kaise pata chalega ki ready hu order ke liye", answer: "जब आपका status available हो जाएगा।" },
+    { question: "available hone ke baad kya hota hai", answer: "आपको डिलीवरी के ऑर्डर मिलने लगते हैं।" },
+    { question: "attendance aur roster me kya difference hai", answer: "रोस्टर अगले दिन की availability है, अटेंडेंस आज की उपस्थिति है।" },
+    { question: "attendance ka time kya hai", answer: "जब आप KFH location पर पहुंचते हैं तब।" },
+    { question: "kya ghar se attendance laga sakte hai", answer: "नहीं, आपको KFH location पर होना चाहिए।" },
+    { question: "attendance lagaya par galat ho gaya", answer: "सपोर्ट टीम से संपर्क करें।" },
+    { question: "available off kar diya to kya hoga", answer: "आपको नए ऑर्डर नहीं मिलेंगे।" },
+    { question: "available kab off kare", answer: "जब आप काम बंद करना चाहते हैं।" },
+    { question: "shift start kaise hoti hai", answer: "अटेंडेंस लगाकर और available करके।" },
+    { question: "shift end kaise hoti hai", answer: "available off करने से।" },
+    { question: "kaam kab start hota hai", answer: "जब आप अटेंडेंस लगाकर available होते हैं।" },
+    { question: "order lene ke liye kya karna hota hai", answer: "अटेंडेंस लगाएं और available करें।" },
+
+    // -------- RETURN APPROVAL (Customer Support) --------
+    { question: "return approval kya hota hai", answer: "रिटर्न अप्रूवल का मतलब है ऑर्डर वापस लेने के लिए कस्टमर सपोर्ट से अनुमति लेना।" },
+    { question: "return approval kaun deta hai", answer: "रिटर्न अप्रूवल कस्टमर सपोर्ट टीम (नागेश सर) देते हैं।" },
+    { question: "return kaise approve hota hai", answer: "आप इश्यू बताते हैं और कस्टमर सपोर्ट टीम अप्रूवल देती है।" },
+    { question: "return approval kyu chahiye", answer: "ताकि सही कारण से रिटर्न कन्फर्म हो सके।" },
+    { question: "customer return bol raha hai kya karu", answer: "आप कस्टमर सपोर्ट (नागेश सर) से रिटर्न अप्रूवल लें।" },
+    { question: "product return lena hai kaise kare", answer: "पहले कस्टमर सपोर्ट से अप्रूवल लें फिर रिटर्न प्रोसेस करें।" },
+    { question: "return without approval kar sakte hai", answer: "नहीं, रिटर्न के लिए अप्रूवल लेना जरूरी है।" },
+    { question: "return ke liye kisse contact kare", answer: "रिटर्न के लिए कस्टमर सपोर्ट (नागेश सर) से संपर्क करें।" },
+    { question: "return issue kaun solve karega", answer: "रिटर्न से जुड़े इश्यू कस्टमर सपोर्ट टीम सॉल्व करती है।" },
+
+    // -------- PARTIAL RETURN (DC + Operation) --------
+    { question: "partial return kya hota hai", answer: "पार्शियल रिटर्न का मतलब है ऑर्डर के कुछ आइटम्स वापस करना।" },
+    { question: "partial return ka matlab kya hai", answer: "ऑर्डर का कुछ हिस्सा वापस करना।" },
+    { question: "partial return kaun handle karta hai", answer: "पार्शियल रिटर्न DC और ऑपरेशन टीम हैंडल करती है।" },
+    { question: "customer kuch items return karna chahta hai", answer: "आप पार्शियल रिटर्न प्रोसेस करें और DC टीम को जानकारी दें।" },
+    { question: "half order return karna hai", answer: "इस केस में पार्शियल रिटर्न करना होगा।" },
+    { question: "sirf kuch items return karne hai", answer: "आप पार्शियल रिटर्न ऑप्शन चुन सकते हैं।" },
+    { question: "damage items hai kya kare", answer: "डैमेज आइटम्स के लिए पार्शियल रिटर्न करें।" },
+    { question: "partial return kaise kare", answer: "DC/ऑपरेशन टीम के माध्यम से पार्शियल रिटर्न प्रोसेस होता है।" },
+    { question: "partial return approve kaun karta hai", answer: "पार्शियल रिटर्न DC और ऑपरेशन टीम अप्रूव करती है।" },
+    { question: "partial return ke liye kya kare", answer: "आप DC टीम को सूचित करें और प्रोसेस शुरू करें।" },
+
+    // -------- CASH DEPOSIT (KFH) --------
+    { question: "cash deposit kya hota hai", answer: "कैश डिपॉजिट का मतलब है कलेक्ट किया गया पैसा सिस्टम में जमा करना।" },
+    { question: "cash kaha deposit hota hai", answer: "कैश KFH में डिपॉजिट किया जाता है।" },
+    { question: "cash deposit ka process kya hai", answer: "पहले ऐप में पैसा ऐड करें फिर KFH में डिपॉजिट करें।" },
+    { question: "cash deposit kaise kare", answer: "Step 1: ऐप में पैसा ऐड करें, Step 2: KFH में डिपॉजिट करें।" },
+    { question: "cash entry kaise kare", answer: "आप ऐप में अमाउंट ऐड करके कैश एंट्री कर सकते हैं।" },
+    { question: "delivery ka paisa kaha jama kare", answer: "डिलीवरी का पैसा KFH में जमा करें।" },
+    { question: "cash collect ho gaya ab kya kare", answer: "पहले ऐप में ऐड करें फिर KFH में डिपॉजिट करें।" },
+    { question: "mere paas cash hai kya karu", answer: "आप कैश को ऐप में ऐड करें और KFH में जमा करें।" },
+    { question: "cash ka kya karna hota hai", answer: "कैश को KFH में डिपॉजिट करना होता है।" },
+    { question: "cash deposit nahi kiya to kya hoga", answer: "डिपॉजिट न करने पर इश्यू हो सकता है, इसलिए समय पर जमा करें।" },
+    { question: "cash entry bhul gaya kya kare", answer: "जितनी जल्दी हो सके ऐप में एंट्री अपडेट करें।" },
+    { question: "galat amount add ho gaya", answer: "गलत एंट्री के लिए सपोर्ट टीम को सूचित करें।" },
+
+    // -------- MIXED / SMART --------
+    { question: "pura order return hai kya karu", answer: "आप कस्टमर सपोर्ट (नागेश सर) से रिटर्न अप्रूवल लें।" },
+    { question: "kuch items hi return karne hai", answer: "यह पार्शियल रिटर्न है, DC टीम को इन्फॉर्म करें।" },
+    { question: "paisa jama kaise kare", answer: "पहले ऐप में ऐड करें फिर KFH में डिपॉजिट करें।" },
+    { question: "return aur partial return me difference kya hai", answer: "पूरा ऑर्डर वापस करना रिटर्न है और कुछ आइटम्स वापस करना पार्शियल रिटर्न है।" },
+    { question: "return process kya hai", answer: "पहले कस्टमर सपोर्ट से अप्रूवल लें फिर रिटर्न प्रोसेस करें।" },
+    { question: "partial return process kya hai", answer: "DC टीम के माध्यम से कुछ आइटम्स का रिटर्न किया जाता है।" },
+    { question: "cash deposit process kya hai", answer: "ऐप में पैसा ऐड करें और फिर KFH में जमा करें।" },
+    { question: "what is your name", answer: "मेरा नाम बोटी है, और मुझे शानि गुप्ता ने बनाया है।" },
+    { question: "who created you", answer: "शानि गुप्ता (Shani Gupta) ने मुझे रोस्टर और राइडर सहायक के रूप में बनाया।" }
+  ];
+
+  // Best answer matcher
+  function getBestAnswer(query) {
+    if (!query.trim()) return "कृपया कोई सवाल लिखें या वॉइस से पूछें।";
+    const qLow = query.trim().toLowerCase();
+    for (let item of qaStore) if (item.question.toLowerCase() === qLow) return item.answer;
+    let bestMatch = null, bestScore = 0;
+    for (let item of qaStore) {
+      let itemQ = item.question.toLowerCase();
+      if (qLow.includes(itemQ) || itemQ.includes(qLow)) {
+        let score = Math.max(itemQ.length, qLow.length);
+        if (score > bestScore) { bestScore = score; bestMatch = item.answer; }
+      } else {
+        let words = qLow.split(/\s+/);
+        let overlap = 0;
+        for (let w of words) if (w.length > 2 && itemQ.includes(w)) overlap += 2;
+        if (overlap > bestScore) { bestScore = overlap; bestMatch = item.answer; }
+      }
+    }
+    return bestMatch || "मुझे इस सवाल का जवाब अभी नहीं पता। कृपया रोस्टर, अटेंडेंस, रिटर्न, कैश से जुड़े सवाल पूछें। 🛠️";
+  }
+
+  // Audio setup
+  let autoAudioEnabled = false;
+  let lastAnswerText = "";
+  const audioToggleBtn = document.getElementById("audioToggleBtn");
+  function speakHindiText(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'hi-IN';
+    utterance.rate = 0.92;
+    utterance.pitch = 1.05;
+    window.speechSynthesis.speak(utterance);
+  }
+  function updateToggleUI() {
+    if (autoAudioEnabled) { audioToggleBtn.innerHTML = "🔊 ON"; audioToggleBtn.classList.remove("off"); audioToggleBtn.style.background = "#2e7d32"; }
+    else { audioToggleBtn.innerHTML = "🔇 OFF"; audioToggleBtn.classList.add("off"); audioToggleBtn.style.background = "#9e9e9e"; }
+  }
+  audioToggleBtn.addEventListener("click", () => { autoAudioEnabled = !autoAudioEnabled; updateToggleUI(); speakHindiText(autoAudioEnabled ? "ऑडियो उत्तर सक्षम किया गया" : "ऑडियो उत्तर अक्षम किया गया"); });
+  updateToggleUI();
+  function displayAnswerAndAutoSpeak(question) {
+    const answer = getBestAnswer(question);
+    document.getElementById("answerText").innerHTML = `<i class="fas fa-microphone-alt"></i> ${escapeHtml(answer)}`;
+    lastAnswerText = answer;
+    if (autoAudioEnabled) speakHindiText(answer);
+  }
+  function onAsk() {
+    const q = document.getElementById("userQuestion").value.trim();
+    if (!q) { document.getElementById("answerText").innerHTML = "🌊 Please type a question."; if(autoAudioEnabled) speakHindiText("कृपया कोई सवाल लिखें।"); return; }
+    displayAnswerAndAutoSpeak(q);
+  }
+  function manualSpeak() { if(lastAnswerText) speakHindiText(lastAnswerText); else speakHindiText("पहले कोई सवाल पूछिए।"); }
+  function escapeHtml(str) { return str.replace(/[&<>]/g, m => m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+  
+  // Dynamic suggestions
+  const questionInput = document.getElementById("userQuestion");
+  const dynamicSuggDiv = document.getElementById("dynamicSuggestions");
+  function updateSuggestions() {
+    const input = questionInput.value.trim().toLowerCase();
+    if (input.length < 2) { dynamicSuggDiv.innerHTML = `<span class="suggest-label"><i class="fas fa-lightbulb"></i> Suggestions:</span><span style="font-size:0.75rem; color:#5a8f5a;">Type at least 2 characters → relevant questions appear</span>`; return; }
+    let scored = [];
+    for (let item of qaStore) {
+      let qLow = item.question.toLowerCase();
+      let score = qLow.includes(input) ? 10 + input.length : (input.includes(qLow) ? 8 : 0);
+      if (!score) { let words = input.split(/\s+/); for (let w of words) if (w.length>2 && qLow.includes(w)) score+=3; }
+      if (score>0) scored.push({ text: item.question, score });
+    }
+    scored.sort((a,b)=>b.score - a.score);
+    let top = scored.slice(0,5);
+    if (top.length===0) { dynamicSuggDiv.innerHTML = `<span class="suggest-label">Suggestions:</span><span>No matches, try 'roster', 'attendance', 'return'</span>`; return; }
+    let html = `<span class="suggest-label"><i class="fas fa-lightbulb"></i> Try these:</span>`;
+    top.forEach(s => { html += `<div class="sugg-chip" data-sugg="${escapeHtml(s.text)}">${escapeHtml(s.text.length>35?s.text.substring(0,32)+'..':s.text)}</div>`; });
+    dynamicSuggDiv.innerHTML = html;
+    document.querySelectorAll('.sugg-chip').forEach(chip => { chip.addEventListener('click', (e) => { questionInput.value = chip.getAttribute('data-sugg'); onAsk(); }); });
+  }
+  questionInput.addEventListener('input', updateSuggestions);
+  
+  // Voice recognition
+  let recognition = null;
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = 'hi-IN';
+    recognition.onresult = (e) => { questionInput.value = e.results[0][0].transcript; onAsk(); };
+    recognition.onend = () => { const mb = document.getElementById("micBtn"); if(mb) mb.innerHTML = '<i class="fas fa-microphone"></i> Voice'; };
+  }
+  
+  // Open Google Drive videos in new tab (instead of embedding)
+  function openDriveVideo(link) {
+    if (link) {
+      window.open(link, '_blank');
+    } else {
+      alert("Video link not available.");
+    }
+  }
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("riderDemoTrigger").addEventListener("click", () => openDriveVideo(RIDER_DEMO_LINK));
+    document.getElementById("appUseTrigger").addEventListener("click", () => openDriveVideo(APP_USE_LINK));
+    document.getElementById("askBtn").addEventListener("click", onAsk);
+    document.getElementById("speakAnswerBtn").addEventListener("click", manualSpeak);
+    const micBtn = document.getElementById("micBtn");
+    if(recognition && micBtn) { micBtn.addEventListener("click", () => { recognition.start(); micBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Listening...'; setTimeout(() => { micBtn.innerHTML = '<i class="fas fa-microphone"></i> Voice'; }, 5000); }); }
+    else if(micBtn) { micBtn.disabled = true; micBtn.style.opacity = 0.6; }
+    questionInput.addEventListener("keypress", (e) => { if(e.key === "Enter") onAsk(); });
+    updateSuggestions();
+    lastAnswerText = "नमस्ते! मैं बोटी हूँ, पूरा राइडर गाइड।";
+  });
+</script>
+</body>
+</html>
